@@ -1,12 +1,27 @@
-[gd_scene load_steps=5 format=3 uid="uid://bs6370ld4y3dp"]
+[gd_scene load_steps=7 format=3 uid="uid://bs6370ld4y3dp"]
 
-[ext_resource type="Texture2D" uid="uid://bppvfuncnfn61" path="res://ui/main_menu/background.png" id="1_ekxnf"]
-[ext_resource type="Theme" uid="uid://cs2exp7ykjuum" path="res://ui/main_menu/main_menu.tres" id="1_l6cm7"]
+[ext_resource type="Texture2D" uid="uid://bppvfuncnfn61" path="res://ui/main_menu/background.png" id="1_j3sue"]
+[ext_resource type="Theme" uid="uid://cs2exp7ykjuum" path="res://ui/main_menu/main_menu.tres" id="2_av7rw"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_l6cm7"]
 font_size = 131
 
 [sub_resource type="Theme" id="Theme_l6cm7"]
+
+[sub_resource type="GDScript" id="GDScript_dpqg7"]
+script/source = "extends Button
+"
+
+[sub_resource type="GDScript" id="GDScript_s4lfc"]
+script/source = "extends Button
+
+#func _on_button_pressed() -> void:
+	#get_tree().change_scene_to_file()
+
+
+func _on_pressed() -> void:
+	get_tree().quit() # Replace with function body.
+"
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -23,13 +38,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_ekxnf")
+texture = ExtResource("1_j3sue")
 
 [node name="MenuHolder" type="Panel" parent="."]
 layout_mode = 0
 offset_right = 960.0
 offset_bottom = 1080.0
-theme = ExtResource("1_l6cm7")
+theme = ExtResource("2_av7rw")
 
 [node name="Title" type="Label" parent="MenuHolder"]
 layout_mode = 1
@@ -63,6 +78,7 @@ alignment = 0
 layout_mode = 2
 text = "New Game"
 alignment = 0
+script = SubResource("GDScript_dpqg7")
 
 [node name="LoadGame" type="Button" parent="MenuHolder/ButtonHolder"]
 layout_mode = 2
@@ -78,3 +94,7 @@ alignment = 0
 layout_mode = 2
 text = "Quit"
 alignment = 0
+script = SubResource("GDScript_s4lfc")
+
+[connection signal="pressed" from="MenuHolder/ButtonHolder/NewGame" to="MenuHolder/ButtonHolder/NewGame" method="_on_pressed"]
+[connection signal="pressed" from="MenuHolder/ButtonHolder/Quit" to="MenuHolder/ButtonHolder/Quit" method="_on_pressed"]
