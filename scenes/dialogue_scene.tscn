@@ -1,11 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://dahokl3buo40c"]
+[gd_scene load_steps=6 format=3 uid="uid://dahokl3buo40c"]
 
 [ext_resource type="Theme" uid="uid://dkfwtlc3ls7sb" path="res://ui/dialogue/dialogue_box.tres" id="1_3l5nu"]
+[ext_resource type="Texture2D" uid="uid://c6f76cff7f5jp" path="res://sprites/test/IMG_1459.png" id="2_qpcyj"]
+[ext_resource type="Texture2D" uid="uid://c1ngt8plxnfx8" path="res://sprites/test/OW2_Winston.png" id="3_bhyd5"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cno1m"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qpcyj"]
-content_margin_left = 25.0
+content_margin_left = 55.0
 content_margin_right = 25.0
 
 [node name="DialogueScene" type="Node"]
@@ -18,7 +20,7 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -640.0
-offset_top = -270.0
+offset_top = -370.0
 offset_right = 640.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -26,7 +28,7 @@ grow_vertical = 0
 [node name="BoxBackground" type="Panel" parent="DialogueBox"]
 layout_mode = 0
 offset_right = 1280.0
-offset_bottom = 270.0
+offset_bottom = 370.0
 theme = ExtResource("1_3l5nu")
 
 [node name="Message" type="Control" parent="DialogueBox/BoxBackground"]
@@ -37,13 +39,31 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CharacterLabel" type="RichTextLabel" parent="DialogueBox/BoxBackground/Message"]
-layout_mode = 0
-offset_right = 1280.0
+[node name="Character1Label" type="RichTextLabel" parent="DialogueBox/BoxBackground/Message"]
+layout_mode = 1
+offset_right = 600.0
 offset_bottom = 105.0
+theme_override_font_sizes/italics_font_size = 48
 theme_override_styles/normal = SubResource("StyleBoxEmpty_cno1m")
 bbcode_enabled = true
-text = "[i]Character Name![/i]"
+text = "[i]George Ruf[/i]"
+scroll_active = false
+shortcut_keys_enabled = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Character2Label" type="RichTextLabel" parent="DialogueBox/BoxBackground/Message"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -600.0
+offset_bottom = 105.0
+grow_horizontal = 0
+theme_override_font_sizes/italics_font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxEmpty_cno1m")
+bbcode_enabled = true
+text = "[i]Winston Overwatch[/i]"
 scroll_active = false
 shortcut_keys_enabled = false
 horizontal_alignment = 1
@@ -51,19 +71,72 @@ vertical_alignment = 1
 
 [node name="MessageContent" type="RichTextLabel" parent="DialogueBox/BoxBackground/Message"]
 layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = -72.5
+offset_right = 640.0
+offset_bottom = 92.49988
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_qpcyj")
+bbcode_enabled = true
+text = "This is where the message content would go! Unfortunately, there's no dialogue to put here yet, but that's OK, because this is just a placeholder! My goal here is to fill this up with as much text as we should have, so yay! I don't really know what else to put here, ladeedadeeda... AAAAAAAAA!!! Not sure if we'll ever use this much text, but yeah."
+scroll_active = false
+shortcut_keys_enabled = false
+vertical_alignment = 1
+
+[node name="HistoryButton" type="Button" parent="DialogueBox/BoxBackground/Message"]
+layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -640.0
-offset_top = -165.0
-offset_right = 640.0
+offset_left = -167.0
+offset_top = -68.0
+offset_right = -33.0
+offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_styles/normal = SubResource("StyleBoxEmpty_qpcyj")
-bbcode_enabled = true
-text = "This is where the message content would go! Unfortunately, there's no dialogue to put here yet, but that's OK, because this is just a placeholder!"
-scroll_active = false
-shortcut_keys_enabled = false
-vertical_alignment = 1
+theme = ExtResource("1_3l5nu")
+text = "History"
+
+[node name="AutoButton" type="Button" parent="DialogueBox/BoxBackground/Message"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 33.0
+offset_top = -68.0
+offset_right = 167.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("1_3l5nu")
+text = "Auto"
+
+[node name="Character1Texture" type="TextureRect" parent="DialogueBox"]
+layout_mode = 1
+offset_left = 15.0
+offset_top = -512.0
+offset_right = 527.0
+texture = ExtResource("2_qpcyj")
+expand_mode = 1
+
+[node name="Character2Texture" type="TextureRect" parent="DialogueBox"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -527.0
+offset_top = -512.0
+offset_right = -15.0
+grow_horizontal = 0
+texture = ExtResource("3_bhyd5")
+expand_mode = 1
