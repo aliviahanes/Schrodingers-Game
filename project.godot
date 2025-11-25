@@ -11,7 +11,6 @@ config_version=5
 [application]
 
 config/name="Schrodinger"
-run/main_scene="uid://bs6370ld4y3dp"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
 
