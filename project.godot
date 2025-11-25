@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="Schrodinger"
+run/main_scene="uid://bs6370ld4y3dp"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -21,6 +22,7 @@ window/size/viewport_height=1080
 window/size/mode=3
 window/size/resizable=false
 window/stretch/mode="canvas_items"
+mouse_cursor/custom_image="uid://i5dsp85c0i02"
 
 [rendering]
 

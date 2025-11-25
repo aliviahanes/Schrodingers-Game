@@ -1,0 +1,93 @@
+[gd_scene load_steps=5 format=3 uid="uid://bs6370ld4y3dp"]
+
+<<<<<<<< HEAD:scripts/main_menu.tscn
+[ext_resource type="Texture2D" uid="uid://bppvfuncnfn61" path="res://ui/main_menu/background.png" id="1_cyejb"]
+[ext_resource type="Theme" uid="uid://cs2exp7ykjuum" path="res://ui/main_menu/main_menu.tres" id="2_qqsp2"]
+========
+[ext_resource type="Texture2D" uid="uid://bppvfuncnfn61" path="res://ui/main_menu/background.png" id="1_ekxnf"]
+[ext_resource type="Theme" uid="uid://cs2exp7ykjuum" path="res://ui/main_menu/main_menu.tres" id="1_l6cm7"]
+>>>>>>>> 9e8444d8e62ceda592df13632865cb43b1d43ff9:main_menu.tscn
+
+[sub_resource type="LabelSettings" id="LabelSettings_l6cm7"]
+font_size = 131
+
+[sub_resource type="Theme" id="Theme_l6cm7"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundImage" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+<<<<<<<< HEAD:scripts/main_menu.tscn
+texture = ExtResource("1_cyejb")
+========
+texture = ExtResource("1_ekxnf")
+>>>>>>>> 9e8444d8e62ceda592df13632865cb43b1d43ff9:main_menu.tscn
+
+[node name="MenuHolder" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 960.0
+offset_bottom = 1080.0
+<<<<<<<< HEAD:scripts/main_menu.tscn
+theme = ExtResource("2_qqsp2")
+========
+theme = ExtResource("1_l6cm7")
+>>>>>>>> 9e8444d8e62ceda592df13632865cb43b1d43ff9:main_menu.tscn
+
+[node name="Title" type="Label" parent="MenuHolder"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 50.0
+offset_top = -490.0
+offset_right = 1010.0
+offset_bottom = -309.99973
+grow_vertical = 2
+text = "Schrodinger"
+label_settings = SubResource("LabelSettings_l6cm7")
+
+[node name="ButtonHolder" type="VBoxContainer" parent="MenuHolder"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -720.0
+offset_right = 960.0
+grow_vertical = 0
+
+[node name="Continue" type="Button" parent="MenuHolder/ButtonHolder"]
+layout_mode = 2
+theme = SubResource("Theme_l6cm7")
+text = "Continue"
+alignment = 0
+
+[node name="NewGame" type="Button" parent="MenuHolder/ButtonHolder"]
+layout_mode = 2
+text = "New Game"
+alignment = 0
+
+[node name="LoadGame" type="Button" parent="MenuHolder/ButtonHolder"]
+layout_mode = 2
+text = "Load Game"
+alignment = 0
+
+[node name="Settings" type="Button" parent="MenuHolder/ButtonHolder"]
+layout_mode = 2
+text = "Settings"
+alignment = 0
+
+[node name="Quit" type="Button" parent="MenuHolder/ButtonHolder"]
+layout_mode = 2
+text = "Quit"
+alignment = 0
