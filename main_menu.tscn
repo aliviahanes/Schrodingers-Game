@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bs6370ld4y3dp"]
+[gd_scene load_steps=6 format=3 uid="uid://bs6370ld4y3dp"]
 
 [ext_resource type="Texture2D" uid="uid://bppvfuncnfn61" path="res://ui/main_menu/background.png" id="1_ekxnf"]
 [ext_resource type="Theme" uid="uid://cs2exp7ykjuum" path="res://ui/main_menu/main_menu.tres" id="1_l6cm7"]
+[ext_resource type="Script" uid="uid://d304k52n7f8qs" path="res://quit.gd" id="3_fu7sn"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_l6cm7"]
 font_size = 131
@@ -78,3 +79,6 @@ alignment = 0
 layout_mode = 2
 text = "Quit"
 alignment = 0
+script = ExtResource("3_fu7sn")
+
+[connection signal="pressed" from="MenuHolder/ButtonHolder/Quit" to="MenuHolder/ButtonHolder/Quit" method="_on_pressed"]
