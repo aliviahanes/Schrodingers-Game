@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://cjybk6fbgmwin"]
+
+[ext_resource type="Texture2D" uid="uid://blqbm1ol48b4t" path="res://sprites/pixil-frame-0 (4).png" id="1_y8arw"]
+
+[node name="PuzzleScene" type="Node2D"]
+
+[node name="PixilFrame0(4)" type="Sprite2D" parent="."]
+position = Vector2(423, 285)
+scale = Vector2(26.5, 17.75)
+texture = ExtResource("1_y8arw")
+
+[node name="Button" type="Button" parent="."]
+offset_left = 295.0
+offset_top = 151.0
+offset_right = 422.0
+offset_bottom = 477.0
+
+[node name="Sprite2D" type="Sprite2D" parent="Button"]
