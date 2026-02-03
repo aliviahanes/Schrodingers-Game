@@ -1,0 +1,41 @@
+{
+	id: "example_dialogue"
+	messages: {
+		{
+			message_id: "message0"
+			order: 0
+			speaker: ""
+			content: (_content string_)
+			responses: {
+				{
+					redirect: (_message id string_)
+					content: (_content_)
+				}
+			}
+		}
+		{
+			message_id: (_unique message id string_)
+			order: 1
+			speaker: (_speaker id string or placeholder_)
+			content: (_content string_)
+			responses: {
+				{
+					redirect: (_message id string_)
+					content: (_content_)
+				}
+			}
+		}
+		{
+			message_id: (_unique message id string_)
+			order: 2
+			speaker: (_speaker id string or placeholder_)
+			content: (_content string_)
+			responses: {
+				{
+					redirect: (_message id string_)
+					content: (_content_)
+				}
+			}
+		}
+	}
+}
