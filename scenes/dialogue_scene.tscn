@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://dahokl3buo40c"]
+[gd_scene load_steps=7 format=3 uid="uid://dahokl3buo40c"]
 
 [ext_resource type="Theme" uid="uid://dkfwtlc3ls7sb" path="res://ui/dialogue/dialogue_box.tres" id="1_3l5nu"]
+[ext_resource type="Script" uid="uid://depp1ma5sdcdb" path="res://scripts/dialogue.gd" id="1_bhyd5"]
 [ext_resource type="Texture2D" uid="uid://c6f76cff7f5jp" path="res://sprites/test/IMG_1459.png" id="2_qpcyj"]
 [ext_resource type="Texture2D" uid="uid://c1ngt8plxnfx8" path="res://sprites/test/OW2_Winston.png" id="3_bhyd5"]
 
@@ -11,6 +12,7 @@ content_margin_left = 55.0
 content_margin_right = 25.0
 
 [node name="DialogueScene" type="Node"]
+script = ExtResource("1_bhyd5")
 
 [node name="DialogueBox" type="Control" parent="."]
 layout_mode = 3
