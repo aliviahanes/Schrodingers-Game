@@ -1,0 +1,35 @@
+{
+	"id": "example_dialogue",
+	"messages": [
+		{
+			"message_id": "message0",
+			"speaker": "test",
+			"content": "This is a content string!",
+		},
+		{
+			"message_id": "message1",
+			"speaker": "test2",
+			"content": "The second speaker is now speaking!",
+			"responses": [
+				{
+					"redirect": "message3",
+					"content": "You are responding, and it will redirect to message3!"
+				},
+				{
+					"redirect": "message4",
+					"content": "This goes to message4!"
+				}
+			]
+		},
+		{
+			"message_id": "message3",
+			"speaker": "test1",
+			"content": "The first speaker is once again speaking!"
+		},
+		{
+			"message_id": "message4",
+			"speaker": "test2",
+			"content": "The second speaker is speaking again!"
+		}
+	]
+}

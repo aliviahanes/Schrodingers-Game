@@ -1,0 +1,8 @@
+{
+	"speakers": {
+		"test": {
+			"sprite_file_prefix": "test_speaker_",
+			"display_name": "Winton Overwat"
+		}
+	}
+}
