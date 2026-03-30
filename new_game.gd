@@ -5,4 +5,4 @@ func _on_button_pressed() -> void:
 	pass
 
 func _on_pressed() -> void:
-	get_tree().quit()
+	get_tree().change_scene_to_file("res://scenes/puzzle_scene.tscn")
