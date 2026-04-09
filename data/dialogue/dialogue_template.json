@@ -4,6 +4,7 @@
 		{
 			"message_id": (_unique message id string_),
 			"speaker": (_speaker id string or placeholder_),
+			"speaker_mood": (_mood id_),
 			"content": (_content string_),
 			"responses": [
 				{

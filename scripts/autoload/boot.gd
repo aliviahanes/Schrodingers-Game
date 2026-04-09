@@ -4,7 +4,13 @@ extends Node
 
 func _ready():
 	# Load and validate all dialogue
+	# Why validate good files in prod? To make the user think we're mining bitcoin or something idk
 	for file_name in (DirAccess.open(Globals.DIALOGUE_DATA_PATH).get_files()):
+		if (file_name == "speaker_map.json"):
+			# this is a super duper special file that gets special treatment for being so special
+			# TODO: actually validate this instead of just throwing it into a variable
+			var smap = FileAccess.open(Globals.DIALOGUE_DATA_PATH + "/speaker_map.json", FileAccess.READ)
+			Globals.loaded_speakers = JSON.parse_string(smap.get_as_text())
 		var file = FileAccess.open(file_name, FileAccess.READ)
 		var contents = JSON.parse_string(file.get_as_text())
 		file.close()

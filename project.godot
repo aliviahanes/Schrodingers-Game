@@ -18,9 +18,10 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Logging="*res://scripts/autoload/Logging.gd"
 Globals="*res://scripts/autoload/Globals.gd"
-Boot="*res://scripts/autoload/boot.gd"
+Logging="*res://scripts/autoload/Logging.gd"
+Boot="res://scripts/autoload/boot.gd"
+Dialogue="*res://scripts/autoload/Dialogue.gd"
 
 [debug]
 
