@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://blqbm1ol48b4t"
-path="res://.godot/imported/pixil-frame-0 (4).png-c7c305f1b2e465485bbceff98ba6542d.ctex"
+uid="uid://bhv6pf0ig2my4"
+path="res://.godot/imported/Schrodinger_Back.png-e5fd586de7a749fc1adb11e28326f6b7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/pixil-frame-0 (4).png"
-dest_files=["res://.godot/imported/pixil-frame-0 (4).png-c7c305f1b2e465485bbceff98ba6542d.ctex"]
+source_file="res://sprites/schrodinger/Schrodinger_Back.png"
+dest_files=["res://.godot/imported/Schrodinger_Back.png-e5fd586de7a749fc1adb11e28326f6b7.ctex"]
 
 [params]
 
