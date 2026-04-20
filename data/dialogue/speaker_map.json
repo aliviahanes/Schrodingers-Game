@@ -1,6 +1,12 @@
 {
 	"speakers": {
-		"test": "Winton Overwat",
-		"blank": "blank"
+		"test": {
+			"display": "Winton Overwat",
+			"default_message_speed": 22
+		},
+		"blank": {
+			"display": " ",
+			"default_message_speed": 19
+		}
 	}
 }

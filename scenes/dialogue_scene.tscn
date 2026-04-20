@@ -8,11 +8,21 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cno1m"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qpcyj"]
-content_margin_left = 55.0
+content_margin_left = 50.0
+content_margin_top = 5.0
 content_margin_right = 25.0
 
 [node name="DialogueRoot" type="Node"]
 script = ExtResource("1_bhyd5")
+
+[node name="ClickShield" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="DialogueBox" type="Control" parent="."]
 layout_mode = 3
@@ -21,16 +31,17 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -640.0
+offset_left = -960.0
 offset_top = -370.0
-offset_right = 640.0
+offset_right = 960.0
 grow_horizontal = 2
 grow_vertical = 0
 
 [node name="BoxBackground" type="Panel" parent="DialogueBox"]
 layout_mode = 0
-offset_right = 1280.0
+offset_right = 1920.0
 offset_bottom = 370.0
+mouse_filter = 2
 theme = ExtResource("1_3l5nu")
 
 [node name="Message" type="Control" parent="DialogueBox/BoxBackground"]
@@ -40,12 +51,20 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="Character1Label" type="RichTextLabel" parent="DialogueBox/BoxBackground/Message"]
 layout_mode = 1
-offset_right = 600.0
-offset_bottom = 105.0
+offset_left = 100.0
+offset_top = 5.0
+offset_right = 700.0
+offset_bottom = 80.0
+mouse_filter = 1
+theme_override_font_sizes/normal_font_size = 48
+theme_override_font_sizes/bold_font_size = 48
+theme_override_font_sizes/bold_italics_font_size = 48
 theme_override_font_sizes/italics_font_size = 48
+theme_override_font_sizes/mono_font_size = 48
 theme_override_styles/normal = SubResource("StyleBoxEmpty_cno1m")
 bbcode_enabled = true
 text = "[i]George Ruf[/i]"
@@ -59,10 +78,17 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -600.0
-offset_bottom = 105.0
+offset_left = -700.0
+offset_top = 5.0
+offset_right = -100.0
+offset_bottom = 80.0
 grow_horizontal = 0
+mouse_filter = 1
+theme_override_font_sizes/normal_font_size = 48
+theme_override_font_sizes/bold_font_size = 48
+theme_override_font_sizes/bold_italics_font_size = 48
 theme_override_font_sizes/italics_font_size = 48
+theme_override_font_sizes/mono_font_size = 48
 theme_override_styles/normal = SubResource("StyleBoxEmpty_cno1m")
 bbcode_enabled = true
 text = "[i]Winston Overwatch[/i]"
@@ -72,24 +98,44 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="MessageContent" type="RichTextLabel" parent="DialogueBox/BoxBackground/Message"]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -640.0
-offset_top = -72.5
-offset_right = 640.0
-offset_bottom = 92.49988
+offset_left = -960.0
+offset_top = -92.5
+offset_right = 960.0
+offset_bottom = 112.5
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 theme_override_styles/normal = SubResource("StyleBoxEmpty_qpcyj")
 bbcode_enabled = true
 text = "This is where the message content would go! Unfortunately, there's no dialogue to put here yet, but that's OK, because this is just a placeholder! My goal here is to fill this up with as much text as we should have, so yay! I don't really know what else to put here, ladeedadeeda... AAAAAAAAA!!! Not sure if we'll ever use this much text, but yeah."
 scroll_active = false
 shortcut_keys_enabled = false
-vertical_alignment = 1
+metadata/original_content = ""
+
+[node name="ResponseContainer" type="CenterContainer" parent="DialogueBox/BoxBackground/Message"]
+visible = false
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 370.0
+
+[node name="ResponseGrid" type="GridContainer" parent="DialogueBox/BoxBackground/Message/ResponseContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+columns = 2
+
+[node name="ResponseTemplate" type="Button" parent="DialogueBox/BoxBackground/Message/ResponseContainer/ResponseGrid"]
+visible = false
+custom_minimum_size = Vector2(900, 80)
+layout_mode = 2
+text = "This is an example of a response! This is max size!!!!"
+autowrap_mode = 2
 
 [node name="HistoryButton" type="Button" parent="DialogueBox/BoxBackground/Message"]
 layout_mode = 1
@@ -125,9 +171,9 @@ text = "Auto"
 
 [node name="Character1Texture" type="TextureRect" parent="DialogueBox"]
 layout_mode = 1
-offset_left = 15.0
+offset_left = 142.0
 offset_top = -512.0
-offset_right = 527.0
+offset_right = 654.0
 texture = ExtResource("2_qpcyj")
 expand_mode = 1
 metadata/current_speaker = ""
@@ -137,9 +183,9 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -527.0
+offset_left = -667.0
 offset_top = -512.0
-offset_right = -15.0
+offset_right = -155.0
 grow_horizontal = 0
 texture = ExtResource("3_bhyd5")
 expand_mode = 1

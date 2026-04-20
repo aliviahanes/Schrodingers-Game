@@ -1,37 +1,35 @@
 {
-	"id": (_unique conversation id string_),
+	"id": "(_unique conversation id string_)",
 	"messages": [
 		{
-			"message_id": (_unique message id string_),
-			"speaker": (_speaker id string or placeholder_),
-			"speaker_mood": (_mood id_),
-			"content": (_content string_),
+			"message_id": "(_unique message id string_)",
+			"participant1": "(_speaker id string or placeholder)",
+			"participant1_mood": 0,
+			"participant2": "(_speaker id string or placeholder)",
+			"participant2_mood": 0,
+			"speaker": "(_speaker id string or placeholder_)",
+			"content": "(_content string_)",
+			"ending": false,
 			"responses": [
 				{
-					"redirect": (_message id string_),
-					"content": (_content_)
+					"redirect": "(_message id string_)",
+					"content": "(_content_)"
 				}
 			]
 		},
 		{
-			"message_id": (_unique message id string_),
-			"speaker": (_speaker id string or placeholder_),
-			"content": (_content string_),
+			"message_id": "(_unique message id string_)",
+			"participant1": "(_speaker id string or placeholder)",
+			"participant1_mood": 0,
+			"participant2": "(_speaker id string or placeholder)",
+			"participant2_mood": 0,
+			"speaker": "(_speaker id string or placeholder_)",
+			"content": "(_content string_)",
+			"ending": false,
 			"responses": [
 				{
-					"redirect": (_message id string_),
-					"content": (_content_)
-				}
-			]
-		},
-		{
-			"message_id": (_unique message id string_),
-			"speaker": (_speaker id string or placeholder_),
-			"content": (_content string_),
-			"responses": [
-				{
-					"redirect": (_message id string_),
-					"content": (_content_)
+					"redirect": "(_message id string_)",
+					"content": "(_content_)"
 				}
 			]
 		}

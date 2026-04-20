@@ -5,16 +5,17 @@
 			"message_id": "message0",
 			"participant1": "test",
 			"speaker": "test",
-			"content": "This is a content string!",
+			"content": "This is a [pause=2.0]content string!",
 		},
 		{
 			"message_id": "message1",
 			"participant1": "test",
-			"participant1_mood": 0,
-			"participant2": "test2",
+			"participant1_mood": 1,
+			"participant2": "blank",
 			"participant2_mood": 1,
-			"speaker": "test2",
-			"content": "The second speaker is now speaking!",
+			"speaker": "blank",
+			"content": "[speed=8]The second speaker is now speaking!",
+			"next": "message3",
 			"responses": [
 				{
 					"redirect": "message3",
@@ -29,15 +30,15 @@
 		{
 			"message_id": "message3",
 			"ending": true,
-			"participant1": "test1",
-			"speaker": "test1",
+			"participant1": "test",
+			"speaker": "test",
 			"content": "The first speaker is once again speaking!",
 		},
 		{
 			"message_id": "message4",
 			"ending": true,
-			"participant1": "test2",
-			"speaker": "test2",
+			"participant1": "test",
+			"speaker": "test",
 			"content": "The second speaker is speaking again!"
 		}
 	]

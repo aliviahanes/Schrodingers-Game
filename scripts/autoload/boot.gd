@@ -4,16 +4,24 @@ extends Node
 
 func _ready():
 	# Load and validate all dialogue
-	# Why validate good files in prod? To make the user think we're mining bitcoin or something idk
 	for file_name in (DirAccess.open(Globals.DIALOGUE_DATA_PATH).get_files()):
-		if (file_name == "speaker_map.json"):
-			# this is a super duper special file that gets special treatment for being so special
-			# TODO: actually validate this instead of just throwing it into a variable
-			var smap = FileAccess.open(Globals.DIALOGUE_DATA_PATH + "/speaker_map.json", FileAccess.READ)
-			Globals.loaded_speakers = JSON.parse_string(smap.get_as_text())
-		var file = FileAccess.open(file_name, FileAccess.READ)
+		var file = FileAccess.open(Globals.DIALOGUE_DATA_PATH + file_name, FileAccess.READ)
 		var contents = JSON.parse_string(file.get_as_text())
 		file.close()
+		if (file_name == "speaker_map.json"):
+			# this is a super duper special file that gets special treatment for being so special
+			if (contents.get("speakers")):
+				for speaker in contents:
+					if (contents[speaker].get("display") == null):
+						Logging.log(Logging.LogType.WARNING, "Boot", "Speaker %s does not have a display name, using default!" % speaker)
+						contents[speaker].set("display", "DISPLAY_NOT_FOUND")
+					if (contents[speaker].get("default_message_speed")):
+						if (not contents[speaker].get("default_message_speed").is_valid_int()):
+							Logging.log(Logging.LogType.WARNING, "Boot", "Speaker %s has an invalid default message speed, using default!")
+							contents[speaker].erase("default_message_speed")
+				Globals.loaded_speakers = contents.get("speakers")
+			continue
+		# TODO: Need to finish validations
 		if (contents != null): # JSON.parse_string returns null if there is a parsing error
 			var id = contents.get("id")
 			if (id == null):
@@ -34,3 +42,4 @@ func _ready():
 						"Dialogue %s has a message with no valid message ID; it has not been loaded!" % id
 					)
 					continue
+			Globals.loaded_dialogue.set(id, contents)
