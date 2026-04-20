@@ -4,6 +4,7 @@
 [ext_resource type="Theme" uid="uid://cs2exp7ykjuum" path="res://ui/main_menu/main_menu.tres" id="1_l6cm7"]
 [ext_resource type="Script" uid="uid://d304k52n7f8qs" path="res://quit.gd" id="3_fu7sn"]
 [ext_resource type="Script" uid="uid://cdnc3iqn2aeck" path="res://new_game.gd" id="3_jix8l"]
+[ext_resource type="Theme" uid="uid://cs2exp7ykjuum" path="res://ui/main_menu/main_menu.tres" id="2_bqqt6"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_l6cm7"]
 font_size = 131
@@ -31,7 +32,7 @@ texture = ExtResource("1_ekxnf")
 layout_mode = 0
 offset_right = 960.0
 offset_bottom = 1080.0
-theme = ExtResource("1_l6cm7")
+theme = ExtResource("2_bqqt6")
 
 [node name="Title" type="Label" parent="MenuHolder"]
 layout_mode = 1

@@ -12,14 +12,26 @@ config_version=5
 
 config/name="Schrodinger"
 run/main_scene="uid://bs6370ld4y3dp"
+config/use_custom_user_dir=true
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Globals="*res://scripts/autoload/Globals.gd"
+Logging="*res://scripts/autoload/Logging.gd"
+Boot="res://scripts/autoload/boot.gd"
+Dialogue="*res://scripts/autoload/Dialogue.gd"
+
+[debug]
+
+file_logging/enable_file_logging=true
+file_logging/log_path="user://logs/schrodinger.log"
 
 [display]
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
-window/size/mode=3
 window/size/resizable=false
 window/stretch/mode="canvas_items"
 mouse_cursor/custom_image="uid://i5dsp85c0i02"
