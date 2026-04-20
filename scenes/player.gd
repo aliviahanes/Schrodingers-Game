@@ -3,9 +3,10 @@ extends CharacterBody2D
 var speed = 200
 var direction : Vector2 = Vector2()
 
-@onready var sprite = $Sprite2D
+@onready var sprite = $AnimatedSprite2D
 
 func _ready():
+
 	sprite.hframes = 4
 	sprite.vframes = 1
 
