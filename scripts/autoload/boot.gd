@@ -16,13 +16,12 @@ func _ready():
 						Logging.log(Logging.LogType.WARNING, "Boot", "Speaker %s does not have a display name, using default!" % speaker)
 						contents[speaker].set("display", "DISPLAY_NOT_FOUND")
 					if (contents[speaker].get("default_message_speed")):
-						if (not contents[speaker].get("default_message_speed").is_valid_int()):
+						if (typeof(contents[speaker].get("default_message_speed")) != TYPE_INT):
 							Logging.log(Logging.LogType.WARNING, "Boot", "Speaker %s has an invalid default message speed, using default!")
 							contents[speaker].erase("default_message_speed")
 				Globals.loaded_speakers = contents.get("speakers")
 			continue
-		# TODO: Need to finish validations
-		if (contents != null): # JSON.parse_string returns null if there is a parsing error
+		if (contents != null):
 			var id = contents.get("id")
 			if (id == null):
 				Logging.log(Logging.LogType.WARNING, "Boot", 
@@ -35,11 +34,36 @@ func _ready():
 					"Dialogue %s does not have a valid messages field; it has not been loaded!" % id
 				)
 				continue
+			var messages_failed = false
 			for message in messages:
 				var message_id = message.get("message_id")
 				if (message_id == null or typeof(message_id) != TYPE_STRING):
 					Logging.log(Logging.LogType.WARNING, "Boot",
 						"Dialogue %s has a message with no valid message ID; it has not been loaded!" % id
 					)
-					continue
-			Globals.loaded_dialogue.set(id, contents)
+					messages_failed = true
+					break
+				var message_content = message.get("content")
+				if (message_content == null or typeof(message_content) != TYPE_STRING):
+					Logging.log(Logging.LogType.WARNING, "Boot",
+						"Message %s in dialogue %s has invalid or no content defined; it has not been loaded!" % [
+							message_id,
+							id
+					])
+					messages_failed = true
+					break
+				var speaker = message.get("speaker")
+				var participant1 = message.get("participant1")
+				if ((speaker == null or typeof(speaker) != TYPE_STRING) and (participant1 == null or typeof(participant1) != TYPE_STRING)):
+					Logging.log(Logging.LogType.WARNING, "Boot",
+						"Message %s in dialogue %s has an invalid or no speaker defined; it has not been loaded!" % [
+							message_id,
+							id
+					])
+					messages_failed = true
+					break
+				if (OS.is_debug_build()):
+					# The following validations would be excessive in release builds
+					pass
+			if (not messages_failed):
+				Globals.loaded_dialogue.set(id, contents)
