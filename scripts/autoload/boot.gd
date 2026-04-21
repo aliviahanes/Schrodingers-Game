@@ -11,14 +11,14 @@ func _ready():
 		if (file_name == "speaker_map.json"):
 			# this is a super duper special file that gets special treatment for being so special
 			if (contents.get("speakers")):
-				for speaker in contents:
-					if (contents[speaker].get("display") == null):
+				for speaker in contents["speakers"]:
+					if (contents["speakers"][speaker].get("display") == null):
 						Logging.log(Logging.LogType.WARNING, "Boot", "Speaker %s does not have a display name, using default!" % speaker)
-						contents[speaker].set("display", "DISPLAY_NOT_FOUND")
-					if (contents[speaker].get("default_message_speed")):
-						if (typeof(contents[speaker].get("default_message_speed")) != TYPE_INT):
+						contents["speakers"][speaker].set("display", "DISPLAY_NOT_FOUND")
+					if (contents["speakers"][speaker].get("default_message_speed")):
+						if (typeof(contents["speakers"][speaker].get("default_message_speed")) != TYPE_FLOAT):
 							Logging.log(Logging.LogType.WARNING, "Boot", "Speaker %s has an invalid default message speed, using default!")
-							contents[speaker].erase("default_message_speed")
+							contents["speakers"][speaker].erase("default_message_speed")
 				Globals.loaded_speakers = contents.get("speakers")
 			continue
 		if (contents != null):

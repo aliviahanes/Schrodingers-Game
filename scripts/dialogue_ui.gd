@@ -11,6 +11,8 @@ extends Node
 @onready var ResponseContainerNode = get_node("DialogueBox/BoxBackground/Message/ResponseContainer")
 @onready var ResponseGridNode = get_node("DialogueBox/BoxBackground/Message/ResponseContainer/ResponseGrid")
 @onready var ResponseButtonTemplate = get_node("DialogueBox/BoxBackground/Message/ResponseContainer/ResponseGrid/ResponseTemplate")
+@onready var HistoryButtonNode = get_node("DialogueBox/BoxBackground/Message/HistoryButton")
+@onready var AutoButtonNode = get_node("DialogueBox/BoxBackground/Message/AutoButton")
 
 var message_tag_regex = RegEx.new()
 var message_tag_pattern = "\\[(?<tag>speed|pause|event)=(?<value>[^\\]]+)\\]" # Unescape backslashes if you need to test pattern
@@ -21,6 +23,8 @@ func _ready() -> void:
 	Dialogue.dialogue_new_message.connect(on_dialogue_new_message)
 	Dialogue.dialogue_state_changed.connect(on_dialogue_state_changed)
 	DialogueBoxNode.gui_input.connect(on_box_input)
+	HistoryButtonNode.pressed.connect(on_history_press)
+	AutoButtonNode.pressed.connect(on_auto_press)
 	BoxBackgroundNode.set_focus_mode(Control.FocusMode.FOCUS_ALL)
 
 func animate_message():
@@ -103,7 +107,7 @@ func on_dialogue_new_message(message):
 	current_message_tags = {}
 	MessageContentNode.set_meta("original_content", message.get("content"))
 	MessageContentNode.set_text(process_custom_tags(message.get("content")))
-	var char1 = Globals.loaded_speakers.get(message.get("participant1"), message.get("speaker"))
+	var char1 = Globals.loaded_speakers.get(message.get("participant1", message.get("speaker")))
 	if (char1 == null):
 		Logging.log(Logging.LogType.ERROR, "Dialogue UI", "Couldn't find a character 1 in message %s in dialogue %s" % [
 			message["message_id"],
@@ -111,7 +115,7 @@ func on_dialogue_new_message(message):
 		])
 		return false
 	Character1LabelNode.text = char1.get("display", "DISPLAY_NOT_FOUND")
-	var char2 = Globals.loaded_speakers.get(message.get("participant2"), "blank")
+	var char2 = Globals.loaded_speakers.get(message.get("participant2", "blank"), "blank")
 	Character2LabelNode.text = char2.get("display", "DISPLAY_NOT_FOUND")
 	# TODO: Determine who is speaking and unhighlight the non-speaker
 	var mood = message.get("participant1_mood", 0)
@@ -154,6 +158,12 @@ func on_box_input(ev: InputEvent):
 					Dialogue.dialogue_state_changed.emit(oldstate, Dialogue.current_dialogue_state)
 				else:
 					Dialogue.iterate_dialogue()
+
+func on_history_press():
+	pass
+
+func on_auto_press():
+	pass
 
 func clear_responses():
 	for item in (ResponseGridNode.get_children()):

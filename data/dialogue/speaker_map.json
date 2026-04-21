@@ -7,6 +7,9 @@
 		"blank": {
 			"display": " ",
 			"default_message_speed": 19
+		},
+		"schrodinger": {
+			"display": "Schrodinger"
 		}
 	}
 }

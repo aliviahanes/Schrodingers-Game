@@ -1,3 +1,18 @@
+# Schrodinger Documentation
+
+## Table of Contents
+- [Dialogue System](#dialogue-system)
+
+---
+
+## Dialogue System
+
+The Dialogue System handles all NPC interactions, branching choices, and narrative triggers.
+
+### Data Structure
+Dialogue conversations are stored as-is in JSON. Below is the standard schema for each kind of message:
+
+```json
 {
 	"id": "(_unique conversation id string_)",
 	"messages": [
@@ -40,3 +55,5 @@
 		}
 	]
 }
+
+```
