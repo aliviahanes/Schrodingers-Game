@@ -1,15 +1,64 @@
-[gd_scene load_steps=3 format=3 uid="uid://chd78yy7ow6p3"]
+[gd_scene format=3 uid="uid://l6w6n4l8chrq"]
 
 [ext_resource type="Texture2D" uid="uid://cqas2tookowm1" path="res://sprites/schrodinger/Schrodinger_Sprites.png" id="1_3vyb7"]
+[ext_resource type="Script" uid="uid://eb0yrsk6v6e0" path="res://scripts/player.gd" id="1_g2els"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3vyb7"]
+atlas = ExtResource("1_3vyb7")
+region = Rect2(16, 0, 362, 604)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g2els"]
+atlas = ExtResource("1_3vyb7")
+region = Rect2(378, 0, 362, 604)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qhqgy"]
+atlas = ExtResource("1_3vyb7")
+region = Rect2(740, 0, 362, 604)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dqkch"]
+atlas = ExtResource("1_3vyb7")
+region = Rect2(1102, 0, 362, 604)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_i3pqv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3vyb7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g2els")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qhqgy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dqkch")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
-size = Vector2(469, 183)
+size = Vector2(245, 441)
 
-[node name="Player" type="CharacterBody2D"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_g2els"]
+radius = 360.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0.5, 6.5)
+[node name="Player" type="CharacterBody2D" unique_id=1967094915]
+script = ExtResource("1_g2els")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1293430058]
+position = Vector2(-19, -54)
+sprite_frames = SubResource("SpriteFrames_i3pqv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=854861420]
 shape = SubResource("RectangleShape2D_g2els")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_3vyb7")
+[node name="Interaction Area" type="Area2D" parent="." unique_id=1311755534]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interaction Area" unique_id=1980150456]
+shape = SubResource("CircleShape2D_g2els")
+
+[connection signal="body_entered" from="Interaction Area" to="." method="_on_interaction_area_body_entered"]
+[connection signal="body_exited" from="Interaction Area" to="." method="_on_interaction_area_body_exited"]
