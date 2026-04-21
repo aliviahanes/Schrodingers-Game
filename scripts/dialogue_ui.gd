@@ -111,7 +111,7 @@ func on_dialogue_new_message(message):
 		])
 		return false
 	Character1LabelNode.text = char1.get("display", "DISPLAY_NOT_FOUND")
-	var char2 = Globals.loaded_speakers.get(message.get("participant2"), "blank")
+	var char2 = Globals.loaded_speakers.get(message.get("participant2", "blank"), "blank")
 	Character2LabelNode.text = char2.get("display", "DISPLAY_NOT_FOUND")
 	# TODO: Determine who is speaking and unhighlight the non-speaker
 	var mood = message.get("participant1_mood", 0)

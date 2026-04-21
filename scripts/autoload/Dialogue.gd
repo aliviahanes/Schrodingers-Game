@@ -52,6 +52,7 @@ func begin_dialogue(dialogue_id: String, message_id: String = "") -> bool:
 	dialogue_new_message.emit(current_dialogue["messages"][current_message_index])
 	current_dialogue_state = DialogueState.SPEAKING
 	dialogue_state_changed.emit(DialogueState.CLOSED, DialogueState.SPEAKING)
+	Game.push_game_state(Game.GameState.DIALOGUE)
 	return true
 
 func iterate_dialogue(response_index: int = -1) -> bool:
@@ -98,3 +99,4 @@ func end_dialogue():
 	current_message_index = null
 	current_dialogue_state = DialogueState.CLOSED
 	dialogue_state_changed.emit(DialogueState.IDLE, DialogueState.CLOSED)
+	Game.pop_game_state()
