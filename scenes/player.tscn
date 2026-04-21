@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://chd78yy7ow6p3"]
+
+[ext_resource type="Texture2D" uid="uid://cqas2tookowm1" path="res://sprites/schrodinger/Schrodinger_Sprites.png" id="1_3vyb7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
+size = Vector2(469, 183)
+
+[node name="Player" type="CharacterBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, 6.5)
+shape = SubResource("RectangleShape2D_g2els")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_3vyb7")
