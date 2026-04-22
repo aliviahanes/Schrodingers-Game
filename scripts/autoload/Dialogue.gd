@@ -17,6 +17,7 @@ var current_message_speed = Globals.DIALOGUE_DEFAULT_SPEED
 var current_message_index
 var _current_ui_node
 var current_dialogue_state = DialogueState.CLOSED
+var message_history = []
 
 const DialogueUIScene: PackedScene = preload("res://scenes/dialogue_scene.tscn")
 
@@ -49,6 +50,7 @@ func begin_dialogue(dialogue_id: String, message_id: String = "") -> bool:
 		if (current_message_index == -1):
 			Logging.log(Logging.LogType.ERROR, "Dialogue", "The requested dialogue of ID %s requested to start at message ID %s, but it wasn't found!" % [current_dialogue_id, message_id])
 	current_message_index = message_index
+	message_history.append(current_dialogue["messages"][current_message_index]["message_id"])
 	dialogue_new_message.emit(current_dialogue["messages"][current_message_index])
 	current_dialogue_state = DialogueState.SPEAKING
 	dialogue_state_changed.emit(DialogueState.CLOSED, DialogueState.SPEAKING)
@@ -98,5 +100,6 @@ func end_dialogue():
 	current_dialogue = null
 	current_message_index = null
 	current_dialogue_state = DialogueState.CLOSED
+	message_history.clear()
 	dialogue_state_changed.emit(DialogueState.IDLE, DialogueState.CLOSED)
 	Game.pop_game_state()
