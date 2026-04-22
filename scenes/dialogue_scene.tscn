@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://dahokl3buo40c"]
+[gd_scene load_steps=8 format=3 uid="uid://dahokl3buo40c"]
 
 [ext_resource type="Theme" uid="uid://dkfwtlc3ls7sb" path="res://ui/dialogue/dialogue_box.tres" id="1_3l5nu"]
 [ext_resource type="Script" uid="uid://30ylcf1trn4c" path="res://scripts/dialogue_ui.gd" id="1_bhyd5"]
 [ext_resource type="Texture2D" uid="uid://c6f76cff7f5jp" path="res://sprites/test/IMG_1459.png" id="2_qpcyj"]
 [ext_resource type="Texture2D" uid="uid://c1ngt8plxnfx8" path="res://sprites/test/OW2_Winston.png" id="3_bhyd5"]
+[ext_resource type="Texture2D" uid="uid://i5dsp85c0i02" path="res://sprites/corsor.png" id="5_2e7es"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cno1m"]
 
@@ -190,3 +191,341 @@ grow_horizontal = 0
 texture = ExtResource("3_bhyd5")
 expand_mode = 1
 metadata/current_speaker = ""
+
+[node name="HistoryBox" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -960.0
+offset_top = -470.0
+offset_right = 960.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="BoxBackground" type="Panel" parent="HistoryBox"]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 470.0
+mouse_filter = 2
+theme = ExtResource("1_3l5nu")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HistoryBox/BoxBackground"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -960.0
+offset_top = -225.0
+offset_right = 960.0
+offset_bottom = 225.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+
+[node name="MessageContainer" type="VBoxContainer" parent="HistoryBox/BoxBackground/ScrollContainer"]
+layout_mode = 2
+
+[node name="MessageTemplate" type="Panel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer"]
+visible = false
+custom_minimum_size = Vector2(1920, 128)
+layout_mode = 2
+
+[node name="Character1Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/MessageTemplate"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 10.0
+offset_top = -64.0
+offset_right = 138.0
+offset_bottom = 64.0
+grow_vertical = 2
+texture = ExtResource("2_qpcyj")
+expand_mode = 1
+
+[node name="Character2Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/MessageTemplate"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -138.0
+offset_top = -64.0
+offset_right = -10.0
+offset_bottom = 64.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("3_bhyd5")
+expand_mode = 1
+
+[node name="MessageContent" type="RichTextLabel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/MessageTemplate"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -817.0
+offset_top = -64.0
+offset_right = 817.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "This is where the message content would go! Unfortunately, there's no dialogue to put here yet, but that's OK, because this is just a placeholder! My goal here is to fill this up with as much text as we should have, so yay! I don't really know what else to put here, ladeedadeeda... AAAAAAAAA!!! Not sure if we'll ever use this much text, but yeah."
+vertical_alignment = 1
+
+[node name="Message_0" type="Panel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer"]
+visible = false
+custom_minimum_size = Vector2(1920, 128)
+layout_mode = 2
+
+[node name="Character1Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_0"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 10.0
+offset_top = -64.0
+offset_right = 138.0
+offset_bottom = 64.0
+grow_vertical = 2
+expand_mode = 1
+
+[node name="Character2Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_0"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -138.0
+offset_top = -64.0
+offset_right = -10.0
+offset_bottom = 64.0
+grow_horizontal = 0
+grow_vertical = 2
+expand_mode = 1
+
+[node name="MessageContent" type="RichTextLabel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_0"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -817.0
+offset_top = -64.0
+offset_right = 817.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+vertical_alignment = 1
+
+[node name="Message_1" type="Panel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer"]
+visible = false
+custom_minimum_size = Vector2(1920, 128)
+layout_mode = 2
+
+[node name="Character1Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_1"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 10.0
+offset_top = -64.0
+offset_right = 138.0
+offset_bottom = 64.0
+grow_vertical = 2
+expand_mode = 1
+
+[node name="Character2Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_1"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -138.0
+offset_top = -64.0
+offset_right = -10.0
+offset_bottom = 64.0
+grow_horizontal = 0
+grow_vertical = 2
+expand_mode = 1
+
+[node name="MessageContent" type="RichTextLabel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_1"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -817.0
+offset_top = -64.0
+offset_right = 817.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+vertical_alignment = 1
+
+[node name="Message_2" type="Panel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer"]
+visible = false
+custom_minimum_size = Vector2(1920, 128)
+layout_mode = 2
+
+[node name="Character1Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_2"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 10.0
+offset_top = -64.0
+offset_right = 138.0
+offset_bottom = 64.0
+grow_vertical = 2
+expand_mode = 1
+
+[node name="Character2Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_2"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -138.0
+offset_top = -64.0
+offset_right = -10.0
+offset_bottom = 64.0
+grow_horizontal = 0
+grow_vertical = 2
+expand_mode = 1
+
+[node name="MessageContent" type="RichTextLabel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_2"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -817.0
+offset_top = -64.0
+offset_right = 817.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+vertical_alignment = 1
+
+[node name="Message_3" type="Panel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer"]
+visible = false
+custom_minimum_size = Vector2(1920, 128)
+layout_mode = 2
+
+[node name="Character1Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_3"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 10.0
+offset_top = -64.0
+offset_right = 138.0
+offset_bottom = 64.0
+grow_vertical = 2
+expand_mode = 1
+
+[node name="Character2Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_3"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -138.0
+offset_top = -64.0
+offset_right = -10.0
+offset_bottom = 64.0
+grow_horizontal = 0
+grow_vertical = 2
+expand_mode = 1
+
+[node name="MessageContent" type="RichTextLabel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_3"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -817.0
+offset_top = -64.0
+offset_right = 817.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+vertical_alignment = 1
+
+[node name="Message_4" type="Panel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer"]
+visible = false
+custom_minimum_size = Vector2(1920, 128)
+layout_mode = 2
+
+[node name="Character1Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_4"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 10.0
+offset_top = -64.0
+offset_right = 138.0
+offset_bottom = 64.0
+grow_vertical = 2
+expand_mode = 1
+
+[node name="Character2Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_4"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -138.0
+offset_top = -64.0
+offset_right = -10.0
+offset_bottom = 64.0
+grow_horizontal = 0
+grow_vertical = 2
+expand_mode = 1
+
+[node name="MessageContent" type="RichTextLabel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_4"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -817.0
+offset_top = -64.0
+offset_right = 817.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+vertical_alignment = 1
+
+[node name="CloseButton" type="TextureButton" parent="HistoryBox/BoxBackground"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -74.0
+offset_top = -64.0
+offset_right = -10.0
+grow_horizontal = 0
+texture_normal = ExtResource("5_2e7es")
+ignore_texture_size = true
+stretch_mode = 0

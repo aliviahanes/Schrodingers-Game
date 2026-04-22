@@ -1,18 +1,23 @@
 extends Node
 
-@onready var DialogueBoxNode = get_node("DialogueBox")
 @onready var ClickShieldNode = get_node("ClickShield")
-@onready var BoxBackgroundNode = get_node("DialogueBox/BoxBackground")
-@onready var MessageContentNode = get_node("DialogueBox/BoxBackground/Message/MessageContent")
-@onready var Character1LabelNode = get_node("DialogueBox/BoxBackground/Message/Character1Label")
-@onready var Character2LabelNode = get_node("DialogueBox/BoxBackground/Message/Character2Label")
-@onready var Character1TextureNode = get_node("DialogueBox/Character1Texture")
-@onready var Character2TextureNode = get_node("DialogueBox/Character2Texture")
-@onready var ResponseContainerNode = get_node("DialogueBox/BoxBackground/Message/ResponseContainer")
-@onready var ResponseGridNode = get_node("DialogueBox/BoxBackground/Message/ResponseContainer/ResponseGrid")
-@onready var ResponseButtonTemplate = get_node("DialogueBox/BoxBackground/Message/ResponseContainer/ResponseGrid/ResponseTemplate")
-@onready var HistoryButtonNode = get_node("DialogueBox/BoxBackground/Message/HistoryButton")
-@onready var AutoButtonNode = get_node("DialogueBox/BoxBackground/Message/AutoButton")
+
+@onready var DialogueBoxNode = get_node("DialogueBox")
+@onready var DialogueMessageContentNode = get_node("DialogueBox/BoxBackground/Message/MessageContent")
+@onready var DialogueCharacter1LabelNode = get_node("DialogueBox/BoxBackground/Message/Character1Label")
+@onready var DialogueCharacter2LabelNode = get_node("DialogueBox/BoxBackground/Message/Character2Label")
+@onready var DialogueCharacter1TextureNode = get_node("DialogueBox/Character1Texture")
+@onready var DialogueCharacter2TextureNode = get_node("DialogueBox/Character2Texture")
+@onready var DialogueResponseContainerNode = get_node("DialogueBox/BoxBackground/Message/ResponseContainer")
+@onready var DialogueResponseGridNode = get_node("DialogueBox/BoxBackground/Message/ResponseContainer/ResponseGrid")
+@onready var DialogueResponseButtonTemplate = get_node("DialogueBox/BoxBackground/Message/ResponseContainer/ResponseGrid/ResponseTemplate")
+@onready var DialogueHistoryButtonNode = get_node("DialogueBox/BoxBackground/Message/HistoryButton")
+@onready var DialogueAutoButtonNode = get_node("DialogueBox/BoxBackground/Message/AutoButton")
+
+@onready var HistoryBoxNode = get_node("HistoryBox")
+@onready var HistoryMessageContainerNode = get_node("HistoryBox/BoxBackground/ScrollContainer/MessageContainer")
+@onready var HistoryMessageTemplateNode = get_node("HistoryBox/BoxBackground/ScrollContainer/MessageContainer/MessageTemplate")
+@onready var HistoryCloseButtonNode = get_node("HistoryBox/BoxBackground/CloseButton")
 
 var message_tag_regex = RegEx.new()
 var message_tag_pattern = "\\[(?<tag>speed|pause|event)=(?<value>[^\\]]+)\\]" # Unescape backslashes if you need to test pattern
@@ -23,21 +28,21 @@ func _ready() -> void:
 	Dialogue.dialogue_new_message.connect(on_dialogue_new_message)
 	Dialogue.dialogue_state_changed.connect(on_dialogue_state_changed)
 	DialogueBoxNode.gui_input.connect(on_box_input)
-	HistoryButtonNode.pressed.connect(on_history_press)
-	AutoButtonNode.pressed.connect(on_auto_press)
-	BoxBackgroundNode.set_focus_mode(Control.FocusMode.FOCUS_ALL)
+	DialogueHistoryButtonNode.pressed.connect(on_history_press)
+	HistoryCloseButtonNode.pressed.connect(on_history_close_press)
+	DialogueAutoButtonNode.pressed.connect(on_auto_press)
 
 func animate_message():
-	MessageContentNode.visible_characters = 0
+	DialogueMessageContentNode.visible_characters = 0
 	Dialogue.current_dialogue_state = Dialogue.DialogueState.SPEAKING
-	var text_length = len(MessageContentNode.get_text())
+	var text_length = len(DialogueMessageContentNode.get_text())
 	for i in range((text_length + 1)):
 		if (Dialogue.current_dialogue_state == Dialogue.DialogueState.IDLE):
-			MessageContentNode.visible_characters = -1
+			DialogueMessageContentNode.visible_characters = -1
 			current_message_tags = {}
 			break
 		else:
-			MessageContentNode.visible_characters = i
+			DialogueMessageContentNode.visible_characters = i
 			if (current_message_tags.has(i)):
 				for tag in current_message_tags[i]:
 					match tag["tag"]:
@@ -75,38 +80,38 @@ func on_dialogue_state_changed(old_state: Dialogue.DialogueState, new_state: Dia
 		Dialogue.DialogueState.CLOSED:
 			if (new_state == Dialogue.DialogueState.SPEAKING):
 				ClickShieldNode.mouse_filter = Control.MOUSE_FILTER_STOP
-				MessageContentNode.set_visible_characters(0)
-				MessageContentNode.set_visible(true)
-				ResponseContainerNode.set_visible(false)
+				DialogueMessageContentNode.set_visible_characters(0)
+				DialogueMessageContentNode.set_visible(true)
+				DialogueResponseContainerNode.set_visible(false)
 				DialogueBoxNode.set_visible(true)
 				animate_message()
 			else:
 				Logging.log(Logging.LogType.WARNING, "Dialogue UI", "Dialogue changed from closed to a non-speaking state; this behavior is not supported!")
 		Dialogue.DialogueState.IDLE:
 			if (new_state == Dialogue.DialogueState.SPEAKING):
-				MessageContentNode.set_visible_characters(0)
-				MessageContentNode.set_visible(true)
-				ResponseContainerNode.set_visible(false)
+				DialogueMessageContentNode.set_visible_characters(0)
+				DialogueMessageContentNode.set_visible(true)
+				DialogueResponseContainerNode.set_visible(false)
 				animate_message()
 			elif (new_state == Dialogue.DialogueState.WAITING_RESPONSE):
-				MessageContentNode.set_visible(false)
-				ResponseContainerNode.set_visible(true)
+				DialogueMessageContentNode.set_visible(false)
+				DialogueResponseContainerNode.set_visible(true)
 			elif (new_state == Dialogue.DialogueState.CLOSED):
 				DialogueBoxNode.set_visible(false)
 				ClickShieldNode.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		Dialogue.DialogueState.WAITING_RESPONSE:
 			if (new_state == Dialogue.DialogueState.SPEAKING):
-				ResponseContainerNode.set_visible(false)
-				MessageContentNode.set_visible_characters(0)
-				MessageContentNode.set_visible(true)
+				DialogueResponseContainerNode.set_visible(false)
+				DialogueMessageContentNode.set_visible_characters(0)
+				DialogueMessageContentNode.set_visible(true)
 				animate_message()
 		_:
 			pass
 
 func on_dialogue_new_message(message):
 	current_message_tags = {}
-	MessageContentNode.set_meta("original_content", message.get("content"))
-	MessageContentNode.set_text(process_custom_tags(message.get("content")))
+	DialogueMessageContentNode.set_meta("original_content", message.get("content"))
+	DialogueMessageContentNode.set_text(process_custom_tags(message.get("content")))
 	var char1 = Globals.loaded_speakers.get(message.get("participant1", message.get("speaker")))
 	if (char1 == null):
 		Logging.log(Logging.LogType.ERROR, "Dialogue UI", "Couldn't find a character 1 in message %s in dialogue %s" % [
@@ -114,19 +119,19 @@ func on_dialogue_new_message(message):
 			Dialogue.current_dialogue_id
 		])
 		return false
-	Character1LabelNode.text = char1.get("display", "DISPLAY_NOT_FOUND")
+	DialogueCharacter1LabelNode.text = char1.get("display", "DISPLAY_NOT_FOUND")
 	var char2 = Globals.loaded_speakers.get(message.get("participant2", "blank"), "blank")
-	Character2LabelNode.text = char2.get("display", "DISPLAY_NOT_FOUND")
+	DialogueCharacter2LabelNode.text = char2.get("display", "DISPLAY_NOT_FOUND")
 	# TODO: Determine who is speaking and unhighlight the non-speaker
 	var mood = message.get("participant1_mood", 0)
-	Character1TextureNode.texture = load(Globals.DIALOGUE_SPRITE_PATH + "/%s/%s_%d.png" % [
+	DialogueCharacter1TextureNode.texture = load(Globals.DIALOGUE_SPRITE_PATH + "/%s/%s_%d.png" % [
 		message.get("participant1", message.get("speaker")),
 		message.get("participant1", message.get("speaker")),
 		mood
 	])
 	# This is such a terrible repetition, but I am just him :>
 	mood = message.get("participant2_mood", 0)
-	Character2TextureNode.texture = load(Globals.DIALOGUE_SPRITE_PATH + "/%s/%s_%d.png" % [
+	DialogueCharacter2TextureNode.texture = load(Globals.DIALOGUE_SPRITE_PATH + "/%s/%s_%d.png" % [
 		message.get("participant2", "blank"),
 		message.get("participant2", "blank"),
 		mood
@@ -145,14 +150,14 @@ func on_box_input(ev: InputEvent):
 				var responses = Dialogue.current_dialogue["messages"][Dialogue.current_message_index].get("responses");
 				if (responses):
 					for i in range(len(responses)):
-						var resp = ResponseButtonTemplate.duplicate()
+						var resp = DialogueResponseButtonTemplate.duplicate()
 						resp.set_visible(true)
 						resp.text = responses[i].get("content", "RESPONSE_NOT_FOUND")
 						resp.pressed.connect(func(): 
 							Dialogue.iterate_dialogue(i)
 							clear_responses()
 						)
-						ResponseGridNode.add_child(resp)
+						DialogueResponseGridNode.add_child(resp)
 					var oldstate = Dialogue.current_dialogue_state
 					Dialogue.current_dialogue_state = Dialogue.DialogueState.WAITING_RESPONSE
 					Dialogue.dialogue_state_changed.emit(oldstate, Dialogue.current_dialogue_state)
@@ -160,13 +165,23 @@ func on_box_input(ev: InputEvent):
 					Dialogue.iterate_dialogue()
 
 func on_history_press():
+	var messages = []
+	if (HistoryMessageContainerNode.get_child_count() < len(Dialogue.message_history)):
+		for i in range((HistoryMessageContainerNode.get_child_count()), len(Dialogue.message_history)):
+			var instance = HistoryMessageTemplateNode.duplicate()
+			instance.set_name("Message_%d" % i)
+			HistoryMessageContainerNode.add_child(instance)
+	for id in Dialogue.message_history:
+		pass
+
+func on_history_close_press():
 	pass
 
 func on_auto_press():
 	pass
 
 func clear_responses():
-	for item in (ResponseGridNode.get_children()):
+	for item in (DialogueResponseGridNode.get_children()):
 		if (item.name != "ResponseTemplate"):
 			item.queue_free()
 
