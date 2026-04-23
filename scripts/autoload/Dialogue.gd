@@ -50,7 +50,7 @@ func begin_dialogue(dialogue_id: String, message_id: String = "") -> bool:
 		if (current_message_index == -1):
 			Logging.log(Logging.LogType.ERROR, "Dialogue", "The requested dialogue of ID %s requested to start at message ID %s, but it wasn't found!" % [current_dialogue_id, message_id])
 	current_message_index = message_index
-	message_history.append(current_dialogue["messages"][current_message_index]["message_id"])
+	message_history.append(current_dialogue["messages"][current_message_index])
 	dialogue_new_message.emit(current_dialogue["messages"][current_message_index])
 	current_dialogue_state = DialogueState.SPEAKING
 	dialogue_state_changed.emit(DialogueState.CLOSED, DialogueState.SPEAKING)
@@ -80,6 +80,8 @@ func iterate_dialogue(response_index: int = -1) -> bool:
 						next
 					])
 					return false
+			message_history.append(current_dialogue["messages"][current_message_index])
+			message_history.back().set("chosen_response", response_index)
 		else:
 			var next = current_dialogue["messages"][current_message_index].get("next")
 			if (next == null):
@@ -89,6 +91,7 @@ func iterate_dialogue(response_index: int = -1) -> bool:
 			if (current_message_index == -1):
 				Logging.log(Logging.LogType.ERROR, "Dialogue", "A message in dialogue %s wants to proceed into message ID %s, which does not exist!" % [current_dialogue_id, next])
 				return false
+			message_history.append(current_dialogue["messages"][current_message_index])
 		dialogue_new_message.emit(current_dialogue["messages"][current_message_index])
 		var oldstate = current_dialogue_state
 		current_dialogue_state = DialogueState.SPEAKING

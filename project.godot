@@ -15,9 +15,9 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Schrodinger"
-run/main_scene="uid://dmspr6n57vr78"
+run/main_scene="uid://bs6370ld4y3dp"
 config/use_custom_user_dir=true
-config/features=PackedStringArray("4.6", "GL Compatibility")
+config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]

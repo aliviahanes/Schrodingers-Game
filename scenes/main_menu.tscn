@@ -1,10 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://bs6370ld4y3dp"]
+[gd_scene load_steps=8 format=3 uid="uid://bs6370ld4y3dp"]
 
 [ext_resource type="Script" uid="uid://os3nhackvdju" path="res://scripts/TEST_main_menu.gd" id="1_8ln24"]
 [ext_resource type="Texture2D" uid="uid://bppvfuncnfn61" path="res://ui/main_menu/background.png" id="1_ekxnf"]
 [ext_resource type="Theme" uid="uid://cs2exp7ykjuum" path="res://ui/main_menu/main_menu.tres" id="2_bqqt6"]
-[ext_resource type="Script" uid="uid://d304k52n7f8qs" path="res://scripts/quit.gd" id="3_fu7sn"]
-[ext_resource type="Script" uid="uid://cdnc3iqn2aeck" path="res://scripts/new_game.gd" id="3_jix8l"]
+[ext_resource type="Script" path="res://scripts/quit.gd" id="3_fu7sn"]
+[ext_resource type="Script" path="res://scripts/new_game.gd" id="3_jix8l"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_l6cm7"]
 font_size = 131

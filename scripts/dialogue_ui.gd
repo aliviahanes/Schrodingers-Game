@@ -1,6 +1,7 @@
 extends Node
 
 @onready var ClickShieldNode = get_node("ClickShield")
+@onready var CharacterTimer = get_node("CharacterTimer")
 
 @onready var DialogueBoxNode = get_node("DialogueBox")
 @onready var DialogueMessageContentNode = get_node("DialogueBox/BoxBackground/Message/MessageContent")
@@ -23,6 +24,8 @@ var message_tag_regex = RegEx.new()
 var message_tag_pattern = "\\[(?<tag>speed|pause|event)=(?<value>[^\\]]+)\\]" # Unescape backslashes if you need to test pattern
 var current_message_tags = {}
 
+var auto_enabled = false
+
 func _ready() -> void:
 	message_tag_regex.compile(message_tag_pattern)
 	Dialogue.dialogue_new_message.connect(on_dialogue_new_message)
@@ -37,10 +40,8 @@ func animate_message():
 	Dialogue.current_dialogue_state = Dialogue.DialogueState.SPEAKING
 	var text_length = len(DialogueMessageContentNode.get_text())
 	for i in range((text_length + 1)):
-		if (Dialogue.current_dialogue_state == Dialogue.DialogueState.IDLE):
-			DialogueMessageContentNode.visible_characters = -1
-			current_message_tags = {}
-			break
+		if (Dialogue.current_dialogue_state != Dialogue.DialogueState.SPEAKING):
+			return # The input handler for the dialogue has taken care of everything, just stop animation entirely
 		else:
 			DialogueMessageContentNode.visible_characters = i
 			if (current_message_tags.has(i)):
@@ -56,7 +57,11 @@ func animate_message():
 								])
 						"pause":
 							if (tag["value"].is_valid_float()):
-								await get_tree().create_timer(float(tag["value"])).timeout
+								# A non-oneshot timer is used to be able to end early (in case of skip)
+								# This also prevents the old animation call from interfering with a new one
+								CharacterTimer.set_wait_time(float(tag["value"]))
+								CharacterTimer.start()
+								await CharacterTimer.timeout
 							else:
 								Logging.log(Logging.LogType.WARNING, "Dialogue UI", "Message %s in dialogue %s wanted to pause the message for some time, but it didn't provide a valid float!" % [
 									Dialogue.current_dialogue["messages"][Dialogue.current_message_index]["message_id"],
@@ -98,6 +103,8 @@ func on_dialogue_state_changed(old_state: Dialogue.DialogueState, new_state: Dia
 				DialogueResponseContainerNode.set_visible(true)
 			elif (new_state == Dialogue.DialogueState.CLOSED):
 				DialogueBoxNode.set_visible(false)
+				for node in HistoryMessageContainerNode.get_children():
+					node.set_visible(false)
 				ClickShieldNode.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		Dialogue.DialogueState.WAITING_RESPONSE:
 			if (new_state == Dialogue.DialogueState.SPEAKING):
@@ -145,53 +152,106 @@ func on_box_input(ev: InputEvent):
 			Rect2(Vector2.ZERO, DialogueBoxNode.size).has_point(DialogueBoxNode.get_local_mouse_position())
 		):
 			if (Dialogue.current_dialogue_state == Dialogue.DialogueState.SPEAKING):
-				pass # finish talking
+				Dialogue.current_dialogue_state = Dialogue.DialogueState.IDLE
+				DialogueMessageContentNode.visible_characters = -1
+				current_message_tags = {}
+				CharacterTimer.stop()
+				CharacterTimer.timeout.emit()
 			elif (Dialogue.current_dialogue_state == Dialogue.DialogueState.IDLE):
-				var responses = Dialogue.current_dialogue["messages"][Dialogue.current_message_index].get("responses");
-				if (responses):
-					for i in range(len(responses)):
-						var resp = DialogueResponseButtonTemplate.duplicate()
-						resp.set_visible(true)
-						resp.text = responses[i].get("content", "RESPONSE_NOT_FOUND")
-						resp.pressed.connect(func(): 
-							Dialogue.iterate_dialogue(i)
-							clear_responses()
-						)
-						DialogueResponseGridNode.add_child(resp)
-					var oldstate = Dialogue.current_dialogue_state
-					Dialogue.current_dialogue_state = Dialogue.DialogueState.WAITING_RESPONSE
-					Dialogue.dialogue_state_changed.emit(oldstate, Dialogue.current_dialogue_state)
-				else:
-					Dialogue.iterate_dialogue()
+				add_responses()
+
+func add_responses():
+	var responses = Dialogue.current_dialogue["messages"][Dialogue.current_message_index].get("responses");
+	if (responses):
+		for i in range(len(responses)):
+			var resp = DialogueResponseButtonTemplate.duplicate()
+			resp.set_visible(true)
+			resp.text = responses[i].get("content", "RESPONSE_NOT_FOUND")
+			resp.pressed.connect(func(): 
+				Dialogue.iterate_dialogue(i)
+				clear_responses()
+			)
+			DialogueResponseGridNode.add_child(resp)
+		var oldstate = Dialogue.current_dialogue_state
+		Dialogue.current_dialogue_state = Dialogue.DialogueState.WAITING_RESPONSE
+		Dialogue.dialogue_state_changed.emit(oldstate, Dialogue.current_dialogue_state)
+	else:
+		Dialogue.iterate_dialogue()
 
 func on_history_press():
-	var messages = []
+	var response_count = 0
 	if (HistoryMessageContainerNode.get_child_count() < len(Dialogue.message_history)):
 		for i in range((HistoryMessageContainerNode.get_child_count()), len(Dialogue.message_history)):
 			var instance = HistoryMessageTemplateNode.duplicate()
 			instance.set_name("Message_%d" % i)
 			HistoryMessageContainerNode.add_child(instance)
-	for id in Dialogue.message_history:
-		pass
+	var i = 0
+	for message in Dialogue.message_history:
+		var node = HistoryMessageContainerNode.get_node("Message_%d" % i)
+		node.get_node("MessageContent").set_text(process_custom_tags(message.get("content"), false))
+		node.get_node("Character1Texture").texture = load(Globals.DIALOGUE_SPRITE_PATH + "/%s/%s_0.png" % [
+			message.get("participant1", message.get("speaker", "blank")),
+			message.get("participant1", message.get("speaker", "blank"))
+		])
+		node.get_node("Character2Texture").texture = load(Globals.DIALOGUE_SPRITE_PATH + "/%s/%s_0.png" % [
+			message.get("participant2", "blank"),
+			message.get("participant2", "blank")
+		])
+		if (message.get("participant2") == message.get("speaker")):
+			node.get_node("Character1Texture").set_visible(false)
+			node.get_node("Character2Texture").set_visible(true)
+		else:
+			node.get_node("Character1Texture").set_visible(true)
+			node.get_node("Character2Texture").set_visible(false)
+		if (message.get("chosen_response")):
+			i += 1
+			var second = HistoryMessageContainerNode.get_node("Message_%d" % i)
+			print(message)
+			second.get_node("MessageContent").set_text(message.get("responses")[message.get("chosen_response")].get("content"))
+			second.get_node("Character1Texture").set_visible(false)
+			second.get_node("Character2Texture").set_visible(false)
+			# Instance generator does not compensate for responses
+			var instance = HistoryMessageTemplateNode.duplicate()
+			instance.set_name("Message_%d" % (len(Dialogue.message_history) + response_count))
+			HistoryMessageContainerNode.add_child(instance)
+			response_count += 1
+		i += 1
+		node.set_visible(true)
+	DialogueBoxNode.set_visible(false)
+	HistoryBoxNode.set_visible(true)
 
 func on_history_close_press():
-	pass
+	HistoryBoxNode.set_visible(false)
+	DialogueBoxNode.set_visible(true)
 
 func on_auto_press():
-	pass
+	# TODO: Display whether auto is enabled!
+	if (auto_enabled):
+		Dialogue.dialogue_state_changed.disconnect(auto_on_state_changed)
+	else:
+		Dialogue.dialogue_state_changed.connect(auto_on_state_changed)
+
+func auto_on_state_changed(oldstate: Dialogue.DialogueState, newstate: Dialogue.DialogueState):
+	if (oldstate == Dialogue.DialogueState.SPEAKING and newstate == Dialogue.DialogueState.IDLE):
+		if (not Dialogue.current_dialogue["messages"][Dialogue.current_message_index].get("ending")):
+			CharacterTimer.set_wait_time(Globals.auto_wait_time)
+			CharacterTimer.start()
+			await CharacterTimer.timeout
+			add_responses()
 
 func clear_responses():
 	for item in (DialogueResponseGridNode.get_children()):
 		if (item.name != "ResponseTemplate"):
 			item.queue_free()
 
-func process_custom_tags(content: String) -> String:
+func process_custom_tags(content: String, track_pos: bool = true) -> String:
 	var offset = 0
 	var matches = message_tag_regex.search_all(content)
-	for mat in matches:
-		var final_index = mat.get_start() - offset
-		if not current_message_tags.has(final_index):
-			current_message_tags.set(final_index, [])
-		current_message_tags[final_index].append({"tag": mat.get_string("tag"), "value": mat.get_string("value")})
-		offset += (mat.get_end() - mat.get_start())
+	if (track_pos):
+		for mat in matches:
+			var final_index = mat.get_start() - offset
+			if not current_message_tags.has(final_index):
+				current_message_tags.set(final_index, [])
+			current_message_tags[final_index].append({"tag": mat.get_string("tag"), "value": mat.get_string("value")})
+			offset += (mat.get_end() - mat.get_start())
 	return message_tag_regex.sub(content, "", true)
