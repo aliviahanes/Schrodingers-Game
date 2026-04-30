@@ -23,6 +23,10 @@
 				{
 					"redirect": "message4",
 					"content": "This goes to message4!"
+				},
+				{
+					"event": "test_event",
+					"content": "This is an action that triggers 'test_event'"
 				}
 			]
 		},

@@ -34,14 +34,12 @@ func _ready() -> void:
 	message_tag_regex.compile(message_tag_pattern)
 	Dialogue.dialogue_new_message.connect(on_dialogue_new_message)
 	Dialogue.dialogue_state_changed.connect(on_dialogue_state_changed)
-	DialogueBoxNode.gui_input.connect(handle_continue)
 	DialogueHistoryButtonNode.pressed.connect(on_history_press)
 	HistoryCloseButtonNode.pressed.connect(on_history_close_press)
 	DialogueAutoButtonNode.pressed.connect(on_auto_press)
 	InputManager.change_glyphs.connect(on_change_glyphs)
 
 func _input(event: InputEvent):
-	# TODO: Migrate click detection for DialogueBox to this to remove gui_input connection to handle_continue
 	if (Dialogue.current_dialogue_state != Dialogue.DialogueState.CLOSED):
 		if (not event is InputEventMouse and not event.is_echo()):
 			if (not viewing_history):
@@ -85,6 +83,13 @@ func _input(event: InputEvent):
 				if (event.is_action_pressed("ui_cancel", false, true)):
 					on_history_close_press()
 					get_viewport().set_input_as_handled()
+		elif (event is InputEventMouseButton):
+			if (
+				event.button_index == MouseButton.MOUSE_BUTTON_LEFT and
+				event.pressed and
+				Rect2(Vector2.ZERO, DialogueBoxNode.size).has_point(DialogueBoxNode.get_local_mouse_position())
+			):
+				handle_continue(event)
 
 func animate_message():
 	DialogueMessageContentNode.visible_characters = 0
@@ -92,7 +97,7 @@ func animate_message():
 	var text_length = len(DialogueMessageContentNode.get_text())
 	for i in range((text_length + 1)):
 		if (Dialogue.current_dialogue_state != Dialogue.DialogueState.SPEAKING):
-			return # The input handler for the dialogue has taken care of everything, just stop animation entirely
+			return
 		else:
 			DialogueMessageContentNode.visible_characters = i
 			if (current_message_tags.has(i)):
@@ -156,16 +161,7 @@ func on_dialogue_state_changed(old_state: Dialogue.DialogueState, new_state: Dia
 				DialogueMessageContentNode.set_visible(false)
 				DialogueResponseContainerNode.set_visible(true)
 			elif (new_state == Dialogue.DialogueState.CLOSED):
-				DialogueBoxNode.set_visible(false)
-				for node in HistoryMessageContainerNode.get_children():
-					node.set_visible(false)
-				DialogueCharacter1TextureNode.set_position(Vector2(DialogueCharacter1TextureNode.position.x, -362.0))
-				DialogueCharacter1TextureNode.set_instance_shader_parameter("desaturate_strength", 1.0)
-				DialogueCharacter2TextureNode.set_position(Vector2(DialogueCharacter2TextureNode.position.x, -362.0))
-				DialogueCharacter2TextureNode.set_instance_shader_parameter("desaturate_strength", 1.0)
-				last_speaker = -1
-				last_message = null
-				ClickShieldNode.mouse_filter = Control.MOUSE_FILTER_IGNORE
+				reset_dialogue()
 		Dialogue.DialogueState.WAITING_RESPONSE:
 			if (new_state == Dialogue.DialogueState.SPEAKING):
 				DialogueResponseContainerNode.set_visible(false)
@@ -173,6 +169,8 @@ func on_dialogue_state_changed(old_state: Dialogue.DialogueState, new_state: Dia
 				DialogueMessageContentNode.set_visible(true)
 				desaturate_nonspeaker()
 				animate_message()
+			elif (new_state == Dialogue.DialogueState.CLOSED):
+				reset_dialogue()
 		_:
 			pass
 
@@ -190,7 +188,6 @@ func on_dialogue_new_message(message):
 	DialogueCharacter1LabelNode.text = char1.get("display", "DISPLAY_NOT_FOUND")
 	var char2 = Globals.loaded_speakers.get(message.get("participant2", "blank"), "blank")
 	DialogueCharacter2LabelNode.text = char2.get("display", "DISPLAY_NOT_FOUND")
-	# TODO: Determine who is speaking and unhighlight the non-speaker
 	var mood = message.get("participant1_mood", 0)
 	DialogueCharacter1TextureNode.texture = load(Globals.DIALOGUE_SPRITE_PATH + "%s/%s_%d.png" % [
 		message.get("participant1", message.get("speaker")),
@@ -206,18 +203,6 @@ func on_dialogue_new_message(message):
 	])
 
 func handle_continue(ev: InputEvent):
-	if (ev is InputEventMouseButton):
-		if (not (
-			ev.button_index == MouseButton.MOUSE_BUTTON_LEFT and
-			ev.pressed and
-			Rect2(Vector2.ZERO, DialogueBoxNode.size).has_point(DialogueBoxNode.get_local_mouse_position())
-		)):
-			return
-	elif (ev is InputEventMouseMotion):
-		return
-	else:
-		if (not ev.is_action_pressed("ui_accept", false, true)):
-			return
 	if (Dialogue.current_dialogue_state == Dialogue.DialogueState.SPEAKING):
 		Dialogue.current_dialogue_state = Dialogue.DialogueState.IDLE
 		DialogueMessageContentNode.visible_characters = -1
@@ -236,8 +221,10 @@ func add_responses():
 	var responses = Dialogue.current_dialogue["messages"][Dialogue.current_message_index].get("responses");
 	if (responses):
 		for i in range(len(responses)):
-			var resp = DialogueResponseButtonTemplate.duplicate()
+			var resp: Button = DialogueResponseButtonTemplate.duplicate()
 			resp.text = responses[i].get("content", "RESPONSE_NOT_FOUND")
+			if (responses[i].get("event")):
+				resp.set_button_icon(load(Globals.ICONS_PATH + "corsor.png"))
 			resp.set_visible(true)
 			resp.set_name("Response%d" % i)
 			resp.pressed.connect(func(): 
@@ -252,7 +239,6 @@ func add_responses():
 		Dialogue.iterate_dialogue()
 
 func on_history_press():
-	# TODO: Investigate crash when opening while speaking a message with responses
 	viewing_history = true
 	var response_count = 0
 	if (HistoryMessageContainerNode.get_child_count() < len(Dialogue.message_history)):
@@ -301,7 +287,7 @@ func on_history_close_press():
 
 func on_auto_press():
 	# TODO: Display whether auto is enabled!
-	# TODO: Debounce inputs
+	# 		This can be done with a TextureProgressBar that enables and then progresses as text progresses
 	if (auto_enabled):
 		Dialogue.dialogue_state_changed.disconnect(auto_on_state_changed)
 	else:
@@ -324,7 +310,7 @@ func on_change_glyphs():
 			history_glyph_path = Globals.INPUT_GLYPH_PATH + "playstation/tri.png"
 			auto_glyph_path = Globals.INPUT_GLYPH_PATH + "playstation/sqr.png"
 			history_close_glyph_path = Globals.INPUT_GLYPH_PATH + "playstation/cir.png"
-		InputManager.InputType.NINTENDO:
+		InputManager.InputType.SWITCH:
 			history_glyph_path = Globals.INPUT_GLYPH_PATH + "switch/x.png"
 			auto_glyph_path = Globals.INPUT_GLYPH_PATH + "switch/y.png"
 			history_close_glyph_path = Globals.INPUT_GLYPH_PATH + "switch/a.png"
@@ -395,3 +381,15 @@ func desaturate_nonspeaker():
 			(get_tree().create_tween()).tween_property(anim_up, "position", Vector2(anim_up.position.x, anim_up.position.y - 150), Globals.DIALOGUE_DESATURATION_TIME)
 			last_speaker = 0
 	last_message = message
+
+func reset_dialogue():
+	DialogueBoxNode.set_visible(false)
+	for node in HistoryMessageContainerNode.get_children():
+		node.set_visible(false)
+	DialogueCharacter1TextureNode.set_position(Vector2(DialogueCharacter1TextureNode.position.x, -362.0))
+	DialogueCharacter1TextureNode.set_instance_shader_parameter("desaturate_strength", 1.0)
+	DialogueCharacter2TextureNode.set_position(Vector2(DialogueCharacter2TextureNode.position.x, -362.0))
+	DialogueCharacter2TextureNode.set_instance_shader_parameter("desaturate_strength", 1.0)
+	last_speaker = -1
+	last_message = null
+	ClickShieldNode.mouse_filter = Control.MOUSE_FILTER_IGNORE

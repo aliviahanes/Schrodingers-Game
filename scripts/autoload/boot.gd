@@ -1,6 +1,6 @@
 extends Node
 
-# The methods in this file are not meant to be publicly used, and this will only execute at game start
+# This is only meant to validate data on startup and prepare the necessary resources
 
 func _ready():
 	# Load and validate all dialogue

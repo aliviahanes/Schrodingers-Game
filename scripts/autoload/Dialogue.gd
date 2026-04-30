@@ -63,24 +63,30 @@ func iterate_dialogue(response_index: int = -1) -> bool:
 	else:
 		Dialogue.current_message_speed = Globals.DIALOGUE_DEFAULT_SPEED
 		if (response_index != -1):
-			var next = current_dialogue["messages"][current_message_index].get("responses")[response_index].get("redirect")
-			var oldindex = current_message_index
-			if (next == null):
-				Logging.log(Logging.LogType.ERROR, "Dialogue", "A response in message %s under dialogue %s wants to proceed, but it has no redirect!" % [
-					current_dialogue["messages"][current_message_index]["message_id"],
-					current_dialogue_id
-				])
-				return false
+			var event = current_dialogue["messages"][current_message_index].get("responses")[response_index].get("event")
+			if (event != null):
+				end_dialogue()
+				dialogue_event_triggered.emit(event)
+				return true
 			else:
-				current_message_index = current_dialogue["messages"].find_custom(func(msg): return msg["message_id"] == next)
-				if (current_message_index == -1):
-					Logging.log(Logging.LogType.ERROR, "Dialogue", "A response for message %s in dialogue %s wants to proceed into message ID %s, which does not exist!" % [
-						current_dialogue["messages"][oldindex]["message_id"],
-						current_dialogue_id,
-						next
+				var next = current_dialogue["messages"][current_message_index].get("responses")[response_index].get("redirect")
+				var oldindex = current_message_index
+				if (next == null):
+					Logging.log(Logging.LogType.ERROR, "Dialogue", "A response in message %s under dialogue %s wants to proceed, but it has no redirect!" % [
+						current_dialogue["messages"][current_message_index]["message_id"],
+						current_dialogue_id
 					])
 					return false
-			message_history.append({"response_content": current_dialogue["messages"][oldindex].get("responses")[response_index].get("content")})
+				else:
+					current_message_index = current_dialogue["messages"].find_custom(func(msg): return msg["message_id"] == next)
+					if (current_message_index == -1):
+						Logging.log(Logging.LogType.ERROR, "Dialogue", "A response for message %s in dialogue %s wants to proceed into message ID %s, which does not exist!" % [
+							current_dialogue["messages"][oldindex]["message_id"],
+							current_dialogue_id,
+							next
+						])
+						return false
+				message_history.append({"response_content": current_dialogue["messages"][oldindex].get("responses")[response_index].get("content")})
 		else:
 			var next = current_dialogue["messages"][current_message_index].get("next")
 			if (next == null):
@@ -105,7 +111,8 @@ func end_dialogue() -> void:
 	current_dialogue_id = "none"
 	current_dialogue = null
 	current_message_index = -1
+	var oldstate = current_dialogue_state
 	current_dialogue_state = DialogueState.CLOSED
 	message_history.clear()
-	dialogue_state_changed.emit(DialogueState.IDLE, DialogueState.CLOSED)
+	dialogue_state_changed.emit(oldstate, DialogueState.CLOSED)
 	Game.pop_game_state()

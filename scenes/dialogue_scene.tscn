@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://c1ngt8plxnfx8" path="res://sprites/test/OW2_Winston.png" id="3_bhyd5"]
 [ext_resource type="Texture2D" uid="uid://1rbacoc1rjac" path="res://sprites/glyphs/kb/e.png" id="3_q4mab"]
 [ext_resource type="Texture2D" uid="uid://cacd4j5xty812" path="res://sprites/glyphs/kb/t.png" id="4_o6y45"]
-[ext_resource type="Texture2D" uid="uid://i5dsp85c0i02" path="res://sprites/corsor.png" id="5_2e7es"]
+[ext_resource type="Texture2D" uid="uid://i5dsp85c0i02" path="res://sprites/icons/corsor.png" id="5_2e7es"]
 [ext_resource type="Material" uid="uid://dw1i5xcsue780" path="res://scripts/shaders/dialogue_texture_material.tres" id="5_o6y45"]
 [ext_resource type="Texture2D" uid="uid://0qs756i47bjp" path="res://sprites/schrodinger/schrodinger_0.png" id="6_18hkw"]
 
