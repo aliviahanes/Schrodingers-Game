@@ -54,7 +54,7 @@ func _ready():
 					break
 				var speaker = message.get("speaker")
 				var participant1 = message.get("participant1")
-				if ((speaker == null or typeof(speaker) != TYPE_STRING) and (participant1 == null or typeof(participant1) != TYPE_STRING)):
+				if ((speaker == null or typeof(speaker) != TYPE_STRING or len(speaker) == 0) and (participant1 == null or typeof(participant1) != TYPE_STRING or len(participant1) == 0)):
 					Logging.log(Logging.LogType.WARNING, "Boot",
 						"Message %s in dialogue %s has an invalid or no speaker defined; it has not been loaded!" % [
 							message_id,
@@ -62,8 +62,87 @@ func _ready():
 					])
 					messages_failed = true
 					break
+				var participant2 = message.get("participant2")
+				if (participant2 != null and (typeof(participant2) != TYPE_STRING or len(participant2) == 0)):
+					Logging.log(Logging.LogType.WARNING, "Boot",
+						"Message %s in dialogue %s has an invalid participant2 defined; they will not be shown!" % [
+							message_id,
+							id
+					])
 				if (OS.is_debug_build()):
 					# The following validations would be excessive in release builds
-					pass
+					if (participant1):
+						if (participant2):
+							if (participant1 != speaker and participant2 != speaker):
+								Logging.log(Logging.LogType.WARNING, "Boot",
+									"Message %s in dialogue %s does not match its speaker to either participant; the speaker will be used for participant1!" % [
+										message_id,
+										id
+								])
+								message.set("participant1", speaker)
+						else:
+							if (participant1 != speaker):
+								Logging.log(Logging.LogType.WARNING, "Boot",
+									"Message %s in dialogue %s does not match its speaker and only participant; the speaker will be used!" % [
+										message_id,
+										id
+								])
+								message.set("participant1", speaker)
+					var participant1_mood = message.get("participant1_mood")
+					if (participant1_mood != null):
+						if (typeof(participant1_mood) != TYPE_FLOAT):
+							Logging.log(Logging.LogType.WARNING, "Boot",
+								"Message %s in dialogue %s has an invalid participant1_mood; it has been set to default!" % [
+									message_id,
+									id
+							])
+							message.set("participant1_mood", 0)
+						elif (participant1_mood < 0 or participant1_mood > 4):
+							Logging.log(Logging.LogType.WARNING, "Boot",
+								"Message %s in dialogue %s defined participant1_mood as %d, which is invalid; it has been set to default!" % [
+									message_id,
+									id,
+									participant1_mood
+							])
+							message.set("participant1_mood", 0)
+					var participant2_mood = message.get("participant2_mood")
+					if (participant2_mood != null):
+						if (typeof(participant2_mood) != TYPE_FLOAT):
+							Logging.log(Logging.LogType.WARNING, "Boot",
+								"Message %s in dialogue %s has an invalid participant2_mood; it has been set to default!" % [
+									message_id,
+									id
+							])
+							message.set("participant2_mood", 0)
+						elif (participant2_mood < 0 or participant2_mood > 4):
+							Logging.log(Logging.LogType.WARNING, "Boot",
+								"Message %s in dialogue %s defined participant2_mood as %d, which is invalid; it has been set to default!" % [
+									message_id,
+									id,
+									participant2_mood
+							])
+							message.set("participant2_mood", 0)
+					var ending = message.get("ending")
+					var next = message.get("next")
+					if (ending != null and next != null):
+						Logging.log(Logging.LogType.WARNING, "Boot",
+							"Message %s in dialogue %s has defined a next and is supposed to end dialogue; it will go to the next by default!" % [
+								message_id,
+								id
+						])
+						message.erase("ending")
+					elif (ending != null and typeof(ending) != TYPE_BOOL):
+						Logging.log(Logging.LogType.WARNING, "Boot",
+							"Message %s in dialogue %s defined a non-boolean ending value; it will end by default!" % [
+								message_id,
+								id
+						])
+						message.set("ending", true)
+					elif (next != null and (typeof(next) != TYPE_STRING or len(next) == 0)):
+						Logging.log(Logging.LogType.WARNING, "Boot",
+							"Message %s in dialogue %s has defined an invalid next; it will progress sequentially by default!" % [
+								message_id,
+								id
+						])
 			if (not messages_failed):
 				Globals.loaded_dialogue.set(id, contents)

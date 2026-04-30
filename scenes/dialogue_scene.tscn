@@ -1,10 +1,14 @@
-[gd_scene load_steps=8 format=3 uid="uid://dahokl3buo40c"]
+[gd_scene load_steps=12 format=3 uid="uid://dahokl3buo40c"]
 
 [ext_resource type="Theme" uid="uid://dkfwtlc3ls7sb" path="res://ui/dialogue/dialogue_box.tres" id="1_3l5nu"]
 [ext_resource type="Script" uid="uid://30ylcf1trn4c" path="res://scripts/dialogue_ui.gd" id="1_bhyd5"]
 [ext_resource type="Texture2D" uid="uid://c6f76cff7f5jp" path="res://sprites/test/IMG_1459.png" id="2_qpcyj"]
 [ext_resource type="Texture2D" uid="uid://c1ngt8plxnfx8" path="res://sprites/test/OW2_Winston.png" id="3_bhyd5"]
+[ext_resource type="Texture2D" uid="uid://1rbacoc1rjac" path="res://sprites/glyphs/kb/e.png" id="3_q4mab"]
+[ext_resource type="Texture2D" uid="uid://cacd4j5xty812" path="res://sprites/glyphs/kb/t.png" id="4_o6y45"]
 [ext_resource type="Texture2D" uid="uid://i5dsp85c0i02" path="res://sprites/corsor.png" id="5_2e7es"]
+[ext_resource type="Material" uid="uid://dw1i5xcsue780" path="res://scripts/shaders/dialogue_texture_material.tres" id="5_o6y45"]
+[ext_resource type="Texture2D" uid="uid://0qs756i47bjp" path="res://sprites/schrodinger/schrodinger_0.png" id="6_18hkw"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cno1m"]
 
@@ -38,6 +42,32 @@ offset_right = 960.0
 grow_horizontal = 2
 grow_vertical = 0
 
+[node name="Character1Texture" type="TextureRect" parent="DialogueBox"]
+material = ExtResource("5_o6y45")
+layout_mode = 1
+offset_left = 142.0
+offset_top = -362.0
+offset_right = 654.0
+offset_bottom = 150.0
+texture = ExtResource("6_18hkw")
+expand_mode = 1
+metadata/current_speaker = ""
+
+[node name="Character2Texture" type="TextureRect" parent="DialogueBox"]
+material = ExtResource("5_o6y45")
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -667.0
+offset_top = -362.0
+offset_right = -155.0
+offset_bottom = 150.0
+grow_horizontal = 0
+texture = ExtResource("3_bhyd5")
+expand_mode = 1
+metadata/current_speaker = ""
+
 [node name="BoxBackground" type="Panel" parent="DialogueBox"]
 layout_mode = 0
 offset_right = 1920.0
@@ -68,7 +98,7 @@ theme_override_font_sizes/italics_font_size = 48
 theme_override_font_sizes/mono_font_size = 48
 theme_override_styles/normal = SubResource("StyleBoxEmpty_cno1m")
 bbcode_enabled = true
-text = "[i]George Ruf[/i]"
+text = "[i]Schrodinger[/i]"
 scroll_active = false
 shortcut_keys_enabled = false
 horizontal_alignment = 1
@@ -145,14 +175,16 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -167.0
-offset_top = -68.0
-offset_right = -33.0
-offset_bottom = -10.0
+offset_left = -215.0
+offset_top = -88.0
+offset_right = -5.0
 grow_horizontal = 2
 grow_vertical = 0
+focus_mode = 0
 theme = ExtResource("1_3l5nu")
 text = "History"
+icon = ExtResource("3_q4mab")
+expand_icon = true
 
 [node name="AutoButton" type="Button" parent="DialogueBox/BoxBackground/Message"]
 layout_mode = 1
@@ -162,35 +194,15 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = 33.0
-offset_top = -68.0
-offset_right = 167.0
-offset_bottom = -10.0
+offset_top = -88.0
+offset_right = 197.0
 grow_horizontal = 2
 grow_vertical = 0
+focus_mode = 0
 theme = ExtResource("1_3l5nu")
 text = "Auto"
-
-[node name="Character1Texture" type="TextureRect" parent="DialogueBox"]
-layout_mode = 1
-offset_left = 142.0
-offset_top = -512.0
-offset_right = 654.0
-texture = ExtResource("2_qpcyj")
-expand_mode = 1
-metadata/current_speaker = ""
-
-[node name="Character2Texture" type="TextureRect" parent="DialogueBox"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -667.0
-offset_top = -512.0
-offset_right = -155.0
-grow_horizontal = 0
-texture = ExtResource("3_bhyd5")
-expand_mode = 1
-metadata/current_speaker = ""
+icon = ExtResource("4_o6y45")
+expand_icon = true
 
 [node name="HistoryBox" type="Control" parent="."]
 visible = false
@@ -526,6 +538,7 @@ offset_left = -74.0
 offset_top = -64.0
 offset_right = -10.0
 grow_horizontal = 0
+focus_mode = 0
 texture_normal = ExtResource("5_2e7es")
 ignore_texture_size = true
 stretch_mode = 0

@@ -11,17 +11,17 @@ signal dialogue_state_changed(old_state: DialogueState, new_state: DialogueState
 signal dialogue_new_message(new_message)
 signal dialogue_event_triggered(name: String)
 
-var current_dialogue_id = "none"
+var current_dialogue_id: String = "none"
 var current_dialogue
-var current_message_speed = Globals.DIALOGUE_DEFAULT_SPEED
-var current_message_index
-var _current_ui_node
-var current_dialogue_state = DialogueState.CLOSED
+var current_message_speed: int = Globals.DIALOGUE_DEFAULT_SPEED
+var current_message_index: int
+var _current_ui_node: Node
+var current_dialogue_state: DialogueState = DialogueState.CLOSED
 var message_history = []
 
 const DialogueUIScene: PackedScene = preload("res://scenes/dialogue_scene.tscn")
 
-func _ready() -> void:
+func _ready():
 	instantiate_dialogue()
 	Logging.log(Logging.LogType.INFO, "Dialogue", "Instantiated Dialogue UI!")
 
@@ -64,6 +64,7 @@ func iterate_dialogue(response_index: int = -1) -> bool:
 		Dialogue.current_message_speed = Globals.DIALOGUE_DEFAULT_SPEED
 		if (response_index != -1):
 			var next = current_dialogue["messages"][current_message_index].get("responses")[response_index].get("redirect")
+			var oldindex = current_message_index
 			if (next == null):
 				Logging.log(Logging.LogType.ERROR, "Dialogue", "A response in message %s under dialogue %s wants to proceed, but it has no redirect!" % [
 					current_dialogue["messages"][current_message_index]["message_id"],
@@ -71,7 +72,6 @@ func iterate_dialogue(response_index: int = -1) -> bool:
 				])
 				return false
 			else:
-				var oldindex = current_message_index
 				current_message_index = current_dialogue["messages"].find_custom(func(msg): return msg["message_id"] == next)
 				if (current_message_index == -1):
 					Logging.log(Logging.LogType.ERROR, "Dialogue", "A response for message %s in dialogue %s wants to proceed into message ID %s, which does not exist!" % [
@@ -80,8 +80,7 @@ func iterate_dialogue(response_index: int = -1) -> bool:
 						next
 					])
 					return false
-			message_history.append(current_dialogue["messages"][current_message_index])
-			message_history.back().set("chosen_response", response_index)
+			message_history.append({"response_content": current_dialogue["messages"][oldindex].get("responses")[response_index].get("content")})
 		else:
 			var next = current_dialogue["messages"][current_message_index].get("next")
 			if (next == null):
@@ -91,17 +90,21 @@ func iterate_dialogue(response_index: int = -1) -> bool:
 			if (current_message_index == -1):
 				Logging.log(Logging.LogType.ERROR, "Dialogue", "A message in dialogue %s wants to proceed into message ID %s, which does not exist!" % [current_dialogue_id, next])
 				return false
-			message_history.append(current_dialogue["messages"][current_message_index])
-		dialogue_new_message.emit(current_dialogue["messages"][current_message_index])
-		var oldstate = current_dialogue_state
-		current_dialogue_state = DialogueState.SPEAKING
-		dialogue_state_changed.emit(oldstate, DialogueState.SPEAKING)
+			if (len(current_dialogue["messages"]) > current_message_index):
+				message_history.append(current_dialogue["messages"][current_message_index])
+		if (len(current_dialogue["messages"]) > current_message_index):
+			dialogue_new_message.emit(current_dialogue["messages"][current_message_index])
+			var oldstate = current_dialogue_state
+			current_dialogue_state = DialogueState.SPEAKING
+			dialogue_state_changed.emit(oldstate, DialogueState.SPEAKING)
+		else:
+			end_dialogue()
 	return true
 
-func end_dialogue():
+func end_dialogue() -> void:
 	current_dialogue_id = "none"
 	current_dialogue = null
-	current_message_index = null
+	current_message_index = -1
 	current_dialogue_state = DialogueState.CLOSED
 	message_history.clear()
 	dialogue_state_changed.emit(DialogueState.IDLE, DialogueState.CLOSED)
