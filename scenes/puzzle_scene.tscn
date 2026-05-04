@@ -1,10 +1,10 @@
 [gd_scene load_steps=10 format=3 uid="uid://cjybk6fbgmwin"]
 
-[ext_resource type="Script" uid="uid://cly18mp2341lw" path="res://scenes/puzzle_scene.gd" id="1_hd55b"]
+[ext_resource type="Script" path="res://scripts/puzzle_scene.gd" id="1_hd55b"]
 [ext_resource type="Texture2D" uid="uid://c1ngt8plxnfx8" path="res://sprites/test/OW2_Winston.png" id="2_vyxuf"]
 [ext_resource type="Texture2D" uid="uid://c6f76cff7f5jp" path="res://sprites/test/IMG_1459.png" id="3_hd55b"]
-[ext_resource type="PackedScene" uid="uid://chd78yy7ow6p3" path="res://scenes/player.tscn" id="3_l5i7r"]
-[ext_resource type="Script" uid="uid://bo4nr0shpo0jn" path="res://scenes/player.gd" id="4_cl1mc"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="3_l5i7r"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="4_cl1mc"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_hd55b"]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://i5dsp85c0i02"
-path="res://.godot/imported/corsor.png-68e7ab845038798def07fcfb9e2e4ba5.ctex"
+uid="uid://bxtke0cbg3ts7"
+path="res://.godot/imported/sqr.png-3eb9a18160717c75a3fcd103973b7e3f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/corsor.png"
-dest_files=["res://.godot/imported/corsor.png-68e7ab845038798def07fcfb9e2e4ba5.ctex"]
+source_file="res://sprites/glyphs/playstation/sqr.png"
+dest_files=["res://.godot/imported/sqr.png-3eb9a18160717c75a3fcd103973b7e3f.ctex"]
 
 [params]
 

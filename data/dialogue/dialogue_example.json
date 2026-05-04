@@ -3,19 +3,18 @@
 	"messages": [
 		{
 			"message_id": "message0",
-			"participant1": "test",
-			"speaker": "test",
-			"content": "This is a [pause=2.0]content string!",
+			"speaker": "schrodinger",
+			"content": "This is a... [pause=2.0]content string!",
+			"next": "message1"
 		},
 		{
 			"message_id": "message1",
 			"participant1": "test",
 			"participant1_mood": 1,
-			"participant2": "blank",
+			"participant2": "schrodinger",
 			"participant2_mood": 1,
-			"speaker": "blank",
-			"content": "[speed=8]The second speaker is now speaking!",
-			"next": "message3",
+			"speaker": "test",
+			"content": "[speed=8]The first speaker is now speaking!",
 			"responses": [
 				{
 					"redirect": "message3",
@@ -24,6 +23,10 @@
 				{
 					"redirect": "message4",
 					"content": "This goes to message4!"
+				},
+				{
+					"event": "test_event",
+					"content": "This is an action that triggers 'test_event'"
 				}
 			]
 		},
@@ -31,6 +34,7 @@
 			"message_id": "message3",
 			"ending": true,
 			"participant1": "test",
+			"participant2": "schrodinger",
 			"speaker": "test",
 			"content": "The first speaker is once again speaking!",
 		},
@@ -38,8 +42,9 @@
 			"message_id": "message4",
 			"ending": true,
 			"participant1": "test",
-			"speaker": "test",
-			"content": "The second speaker is speaking again!"
+			"participant2": "schrodinger",
+			"speaker": "schrodinger",
+			"content": "The second speaker is speaking!"
 		}
 	]
 }

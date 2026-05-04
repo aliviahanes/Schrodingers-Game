@@ -1,0 +1,16 @@
+[gd_scene load_steps=0 format=3 uid="uid://dmspr6n57vr78"]
+
+[ext_resource type="PackedScene" uid="uid://l6w6n4l8chrq" path="res://scenes/player.tscn" id="1_w7c3h"]
+[ext_resource type="PackedScene" uid="uid://bfxrhy4m244n0" path="res://scenes/object_interactable.tscn" id="2_w8frs"]
+[ext_resource type="PackedScene" uid="uid://cxq6tdh0dx1o7" path="res://scenes/time_manager.tscn" id="3_w8frs"]
+
+[node name="Level" type="Node2D" unique_id=129888745]
+
+[node name="Player" parent="." unique_id=1967094915 instance=ExtResource("1_w7c3h")]
+position = Vector2(792, 476)
+scale = Vector2(0.2, 0.2)
+
+[node name="Interactable Object" parent="." unique_id=518676693 instance=ExtResource("2_w8frs")]
+position = Vector2(1093, 476)
+
+[node name="TimeManager" parent="." unique_id=462079554 instance=ExtResource("3_w8frs")]
