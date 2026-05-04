@@ -1,9 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://dahokl3buo40c"]
+[gd_scene load_steps=9 format=3 uid="uid://dahokl3buo40c"]
 
 [ext_resource type="Theme" uid="uid://dkfwtlc3ls7sb" path="res://ui/dialogue/dialogue_box.tres" id="1_3l5nu"]
-[ext_resource type="Script" uid="uid://30ylcf1trn4c" path="res://scripts/dialogue_ui.gd" id="1_bhyd5"]
+[ext_resource type="Script" path="res://scripts/dialogue_ui.gd" id="1_bhyd5"]
 [ext_resource type="Texture2D" uid="uid://c6f76cff7f5jp" path="res://sprites/test/IMG_1459.png" id="2_qpcyj"]
 [ext_resource type="Texture2D" uid="uid://c1ngt8plxnfx8" path="res://sprites/test/OW2_Winston.png" id="3_bhyd5"]
+[ext_resource type="AudioStream" uid="uid://wtfov0o4bnaq" path="res://audio/Avian_MafiaVlads_Apartment.mp3" id="5_2e7es"]
+[ext_resource type="Script" uid="uid://cv4xb8fmkxdjk" path="res://scripts/audio_stream_player_2d.gd" id="6_xcky8"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cno1m"]
 
@@ -190,3 +192,8 @@ grow_horizontal = 0
 texture = ExtResource("3_bhyd5")
 expand_mode = 1
 metadata/current_speaker = ""
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_2e7es")
+autoplay = true
+script = ExtResource("6_xcky8")
