@@ -28,4 +28,4 @@ func pop_game_state():
 	game_state.remove_at(0)
 
 func return_to_menu(was_error: bool):
-	pass
+	return was_error

@@ -23,6 +23,10 @@
 				{
 					"redirect": "message4",
 					"content": "This goes to message4!"
+				},
+				{
+					"event": "test_event",
+					"content": "This is an action that triggers 'test_event'"
 				}
 			]
 		},
@@ -30,6 +34,7 @@
 			"message_id": "message3",
 			"ending": true,
 			"participant1": "test",
+			"participant2": "schrodinger",
 			"speaker": "test",
 			"content": "The first speaker is once again speaking!",
 		},
@@ -37,8 +42,9 @@
 			"message_id": "message4",
 			"ending": true,
 			"participant1": "test",
-			"speaker": "test",
-			"content": "The second speaker is speaking again!"
+			"participant2": "schrodinger",
+			"speaker": "schrodinger",
+			"content": "The second speaker is speaking!"
 		}
 	]
 }

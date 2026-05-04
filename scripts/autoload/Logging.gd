@@ -13,8 +13,11 @@ func log(type: LogType, origin: String, message: String):
 		LogType.INFO:
 			print("[INFO: %s] %s" % [origin, message])
 		LogType.WARNING:
+			print_stack()
 			push_warning("[WARNING: %s] %s" % [origin, message])
 		LogType.ERROR:
+			print_stack()
 			push_error("[ERROR: %s] %s" % [origin, message])
 		LogType.FATAL:
+			print_stack()
 			push_error("[FATAL: %s] %s" % [origin, message])
