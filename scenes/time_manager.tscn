@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://cxq6tdh0dx1o7"]
+
+[ext_resource type="Script" uid="uid://cecc5bkq73h2n" path="res://scripts/time_manager.gd" id="1_8e7dt"]
+[ext_resource type="Texture2D" uid="uid://dn2rt60ey4f8r" path="res://sprites/Rabbit Pointing at Clock 100x100.jpg" id="2_8e7dt"]
+
+[node name="TimeManager" type="CanvasLayer" unique_id=462079554]
+script = ExtResource("1_8e7dt")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=519754389]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -308.0
+offset_top = -100.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer" unique_id=1260362346]
+layout_mode = 2
+texture = ExtResource("2_8e7dt")
+
+[node name="TextureRect2" type="TextureRect" parent="HBoxContainer" unique_id=1692698393]
+layout_mode = 2
+texture = ExtResource("2_8e7dt")
+
+[node name="TextureRect3" type="TextureRect" parent="HBoxContainer" unique_id=1652322376]
+layout_mode = 2
+texture = ExtResource("2_8e7dt")
