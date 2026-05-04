@@ -10,7 +10,7 @@ enum InputType {
 
 signal change_glyphs
 
-var current_input_type = InputType.KEYBOARD
+var current_input_type := InputType.KEYBOARD
 var preloaded_glyphs = {InputType.KEYBOARD: []}
 
 func _ready():

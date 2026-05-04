@@ -12,4 +12,4 @@ const DIALOGUE_DESATURATION_LOWER_BY = 150
 # Dynamic Globals
 var loaded_dialogue = {}
 var loaded_speakers = {}
-var auto_wait_time = 1.5
+var auto_wait_time := 3.0

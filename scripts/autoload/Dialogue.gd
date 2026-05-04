@@ -11,12 +11,12 @@ signal dialogue_state_changed(old_state: DialogueState, new_state: DialogueState
 signal dialogue_new_message(new_message)
 signal dialogue_event_triggered(name: String)
 
-var current_dialogue_id: String = "none"
+var current_dialogue_id := "none"
 var current_dialogue
-var current_message_speed: int = Globals.DIALOGUE_DEFAULT_SPEED
+var current_message_speed := Globals.DIALOGUE_DEFAULT_SPEED
 var current_message_index: int
 var _current_ui_node: Node
-var current_dialogue_state: DialogueState = DialogueState.CLOSED
+var current_dialogue_state := DialogueState.CLOSED
 var message_history = []
 
 const DialogueUIScene: PackedScene = preload("res://scenes/dialogue_scene.tscn")
@@ -61,7 +61,7 @@ func iterate_dialogue(response_index: int = -1) -> bool:
 	if (current_dialogue["messages"][current_message_index].get("ending")): # null will coalesce into false
 		end_dialogue()
 	else:
-		Dialogue.current_message_speed = Globals.DIALOGUE_DEFAULT_SPEED
+		current_message_speed = Globals.DIALOGUE_DEFAULT_SPEED
 		if (response_index != -1):
 			var event = current_dialogue["messages"][current_message_index].get("responses")[response_index].get("event")
 			if (event != null):

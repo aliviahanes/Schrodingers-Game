@@ -2,6 +2,7 @@ extends Node
 
 @onready var ClickShieldNode: Control = get_node("ClickShield")
 @onready var CharacterTimer: Timer = get_node("CharacterTimer")
+@onready var AutoTimer: Timer = get_node("AutoTimer")
 
 @onready var DialogueBoxNode: Control = get_node("DialogueBox")
 @onready var DialogueMessageContentNode: RichTextLabel = get_node("DialogueBox/BoxBackground/Message/MessageContent")
@@ -9,26 +10,29 @@ extends Node
 @onready var DialogueCharacter2LabelNode: RichTextLabel = get_node("DialogueBox/BoxBackground/Message/Character2Label")
 @onready var DialogueCharacter1TextureNode: TextureRect = get_node("DialogueBox/Character1Texture")
 @onready var DialogueCharacter2TextureNode: TextureRect = get_node("DialogueBox/Character2Texture")
+@onready var DialogueProgressBarNode: ProgressBar = get_node("DialogueBox/BoxBackground/Message/ProgressBar")
 @onready var DialogueResponseContainerNode: CenterContainer = get_node("DialogueBox/BoxBackground/Message/ResponseContainer")
 @onready var DialogueResponseGridNode: GridContainer = get_node("DialogueBox/BoxBackground/Message/ResponseContainer/ResponseGrid")
 @onready var DialogueResponseButtonTemplate: Button = get_node("DialogueBox/BoxBackground/Message/ResponseContainer/ResponseGrid/ResponseTemplate")
 @onready var DialogueHistoryButtonNode: Button = get_node("DialogueBox/BoxBackground/Message/HistoryButton")
 @onready var DialogueAutoButtonNode: Button = get_node("DialogueBox/BoxBackground/Message/AutoButton")
+@onready var DialogueAutoGlowNode: TextureRect = get_node("DialogueBox/BoxBackground/Message/AutoButton/EnableGlow")
+@onready var DialogueArrowContainerNode: Control = get_node("DialogueBox/BoxBackground/Message/ArrowContainer")
+@onready var DialogueArrowPolygonNode: Node = get_node("DialogueBox/BoxBackground/Message/ArrowContainer/ArrowPolygon")
 
 @onready var HistoryBoxNode: Control = get_node("HistoryBox")
 @onready var HistoryMessageContainerNode: VBoxContainer = get_node("HistoryBox/BoxBackground/ScrollContainer/MessageContainer")
 @onready var HistoryMessageTemplateNode: Panel = get_node("HistoryBox/BoxBackground/ScrollContainer/MessageContainer/MessageTemplate")
-@onready var HistoryCloseButtonNode: TextureButton = get_node("HistoryBox/BoxBackground/CloseButton")
+@onready var HistoryCloseButtonNode: Button = get_node("HistoryBox/BoxBackground/CloseButton")
 
-var message_tag_regex = RegEx.new()
+var message_tag_regex := RegEx.new()
 var message_tag_pattern = "\\[(?<tag>speed|pause|event)=(?<value>[^\\]]+)\\]" # Unescape backslashes if you need to test pattern
 var current_message_tags = {}
-
-var auto_enabled = false
-var viewing_history = false
-
+var auto_enabled := false
+var viewing_history := false
 var last_message = null
-var last_speaker = -1
+var last_speaker := -1
+var continue_tween: Tween
 
 func _ready() -> void:
 	message_tag_regex.compile(message_tag_pattern)
@@ -38,18 +42,21 @@ func _ready() -> void:
 	HistoryCloseButtonNode.pressed.connect(on_history_close_press)
 	DialogueAutoButtonNode.pressed.connect(on_auto_press)
 	InputManager.change_glyphs.connect(on_change_glyphs)
+	continue_tween = get_tree().create_tween().set_loops().set_trans(Tween.TRANS_SINE)
+	continue_tween.tween_property(DialogueArrowPolygonNode, "position", Vector2(0.0, 7.0), 0.7)
+	continue_tween.tween_property(DialogueArrowPolygonNode, "position", Vector2(0.0, -7.0), 0.7)
 
-func _input(event: InputEvent):
+func _input(event: InputEvent) -> void:
 	if (Dialogue.current_dialogue_state != Dialogue.DialogueState.CLOSED):
 		if (not event is InputEventMouse and not event.is_echo()):
 			if (not viewing_history):
-				if (event.is_action_pressed("ui_select", false, true)):
+				if (event.is_action_pressed("dialogue_history", false, true)):
 					on_history_press()
 					get_viewport().set_input_as_handled()
-				elif (event.is_action_pressed("ui_select_secondary", false, true)):
+				elif (event.is_action_pressed("dialogue_auto", false, true)):
 					on_auto_press()
 					get_viewport().set_input_as_handled()
-				elif (event.is_action_pressed("ui_accept", false, true)):
+				elif (event.is_action_pressed("dialogue_continue", false, true)):
 					handle_continue(event)
 					get_viewport().set_input_as_handled()
 				elif (Dialogue.current_dialogue_state == Dialogue.DialogueState.WAITING_RESPONSE):
@@ -80,7 +87,7 @@ func _input(event: InputEvent):
 							Logging.log(Logging.LogType.ERROR, "Dialogue UI", "Attempted to grab focus for a response, but it didn't exist!")
 						get_viewport().set_input_as_handled()
 			else:
-				if (event.is_action_pressed("ui_cancel", false, true)):
+				if (event.is_action_pressed("dialogue_cancel", false, true)):
 					on_history_close_press()
 					get_viewport().set_input_as_handled()
 		elif (event is InputEventMouseButton):
@@ -91,12 +98,18 @@ func _input(event: InputEvent):
 			):
 				handle_continue(event)
 
-func animate_message():
+func animate_message() -> void:
 	DialogueMessageContentNode.visible_characters = 0
+	DialogueProgressBarNode.set_value(0.0)
+	DialogueProgressBarNode.modulate.a = 1.0
 	Dialogue.current_dialogue_state = Dialogue.DialogueState.SPEAKING
-	var text_length = len(DialogueMessageContentNode.get_text())
+	var text_length := len(DialogueMessageContentNode.get_text())
+	var progress_tween := get_tree().create_tween()
+	progress_tween.tween_property(DialogueProgressBarNode, "value", 1.0, time_to_text_complete(Dialogue.current_dialogue.get("messages").get(Dialogue.current_message_index)))
 	for i in range((text_length + 1)):
 		if (Dialogue.current_dialogue_state != Dialogue.DialogueState.SPEAKING):
+			progress_tween.kill()
+			DialogueProgressBarNode.set_value(1.0)
 			return
 		else:
 			DialogueMessageContentNode.visible_characters = i
@@ -135,13 +148,16 @@ func animate_message():
 				await get_tree().create_timer(1.0 / Dialogue.current_message_speed).timeout
 	Dialogue.current_dialogue_state = Dialogue.DialogueState.IDLE
 	Dialogue.dialogue_state_changed.emit(Dialogue.DialogueState.SPEAKING, Dialogue.DialogueState.IDLE)
+	continue_tween.play()
+	DialogueArrowContainerNode.set_visible(true)
+	get_tree().create_tween().set_ease(Tween.EASE_IN).tween_property(DialogueProgressBarNode, "modulate:a", 0.0, 0.4)
 
-func on_dialogue_state_changed(old_state: Dialogue.DialogueState, new_state: Dialogue.DialogueState):
+func on_dialogue_state_changed(old_state: Dialogue.DialogueState, new_state: Dialogue.DialogueState) -> void:
 	match (old_state):
 		Dialogue.DialogueState.CLOSED:
 			if (new_state == Dialogue.DialogueState.SPEAKING):
 				ClickShieldNode.mouse_filter = Control.MOUSE_FILTER_STOP
-				get_viewport().gui_release_focus()
+				ClickShieldNode.grab_focus()
 				DialogueMessageContentNode.set_visible_characters(0)
 				DialogueMessageContentNode.set_visible(true)
 				DialogueResponseContainerNode.set_visible(false)
@@ -174,7 +190,7 @@ func on_dialogue_state_changed(old_state: Dialogue.DialogueState, new_state: Dia
 		_:
 			pass
 
-func on_dialogue_new_message(message):
+func on_dialogue_new_message(message: Dictionary) -> void:
 	current_message_tags = {}
 	DialogueMessageContentNode.set_meta("original_content", message.get("content"))
 	DialogueMessageContentNode.set_text(process_custom_tags(message.get("content")))
@@ -184,7 +200,7 @@ func on_dialogue_new_message(message):
 			message["message_id"],
 			Dialogue.current_dialogue_id
 		])
-		return false
+		return
 	DialogueCharacter1LabelNode.text = char1.get("display", "DISPLAY_NOT_FOUND")
 	var char2 = Globals.loaded_speakers.get(message.get("participant2", "blank"), "blank")
 	DialogueCharacter2LabelNode.text = char2.get("display", "DISPLAY_NOT_FOUND")
@@ -202,22 +218,30 @@ func on_dialogue_new_message(message):
 		mood
 	])
 
-func handle_continue(ev: InputEvent):
+func handle_continue(ev: InputEvent) -> void:
 	if (Dialogue.current_dialogue_state == Dialogue.DialogueState.SPEAKING):
+		AutoTimer.stop()
 		Dialogue.current_dialogue_state = Dialogue.DialogueState.IDLE
 		DialogueMessageContentNode.visible_characters = -1
 		current_message_tags = {}
 		CharacterTimer.stop()
 		CharacterTimer.timeout.emit()
+		continue_tween.play()
+		DialogueArrowContainerNode.set_visible(true)
+		get_tree().create_tween().set_ease(Tween.EASE_IN).tween_property(DialogueProgressBarNode, "modulate:a", 0.0, 0.4)
+		AutoTimer.timeout.emit()
 	elif (Dialogue.current_dialogue_state == Dialogue.DialogueState.IDLE):
+		DialogueArrowContainerNode.set_visible(false)
+		continue_tween.stop()
+		DialogueArrowPolygonNode.set_position(Vector2.ZERO)
 		add_responses()
 	elif (Dialogue.current_dialogue_state == Dialogue.DialogueState.WAITING_RESPONSE):
-		if (ev.is_action_pressed("ui_accept", false, true)):
+		if (ev.is_action_pressed("dialogue_continue", false, true)):
 			var focused = get_viewport().gui_get_focus_owner()
 			if (focused is Button):
 				focused.pressed.emit()
 
-func add_responses():
+func add_responses() -> void:
 	var responses = Dialogue.current_dialogue["messages"][Dialogue.current_message_index].get("responses");
 	if (responses):
 		for i in range(len(responses)):
@@ -232,21 +256,21 @@ func add_responses():
 				clear_responses()
 			)
 			DialogueResponseGridNode.add_child(resp)
-		var oldstate = Dialogue.current_dialogue_state
+		var oldstate := Dialogue.current_dialogue_state
 		Dialogue.current_dialogue_state = Dialogue.DialogueState.WAITING_RESPONSE
 		Dialogue.dialogue_state_changed.emit(oldstate, Dialogue.current_dialogue_state)
 	else:
 		Dialogue.iterate_dialogue()
 
-func on_history_press():
+func on_history_press() -> void:
 	viewing_history = true
-	var response_count = 0
+	var response_count := 0
 	if (HistoryMessageContainerNode.get_child_count() < len(Dialogue.message_history)):
 		for i in range((HistoryMessageContainerNode.get_child_count()), len(Dialogue.message_history)):
 			var instance = HistoryMessageTemplateNode.duplicate()
 			instance.set_name("Message_%d" % i)
 			HistoryMessageContainerNode.add_child(instance)
-	var i = 0
+	var i := 0
 	for message in Dialogue.message_history:
 		var node = HistoryMessageContainerNode.get_node("Message_%d" % i)
 		if (message.get("response_content")):
@@ -280,23 +304,25 @@ func on_history_press():
 	DialogueBoxNode.set_visible(false)
 	HistoryBoxNode.set_visible(true)
 
-func on_history_close_press():
+func on_history_close_press() -> void:
 	viewing_history = false
 	HistoryBoxNode.set_visible(false)
 	DialogueBoxNode.set_visible(true)
 
-func on_auto_press():
-	# TODO: Display whether auto is enabled!
-	# 		This can be done with a TextureProgressBar that enables and then progresses as text progresses
+func on_auto_press() -> void:
 	if (auto_enabled):
 		Dialogue.dialogue_state_changed.disconnect(auto_on_state_changed)
+		DialogueAutoGlowNode.set_visible(false)
+		auto_enabled = false
 	else:
 		Dialogue.dialogue_state_changed.connect(auto_on_state_changed)
+		DialogueAutoGlowNode.set_visible(true)
+		auto_enabled = true
 
-func on_change_glyphs():
-	var history_glyph_path: String = Globals.INPUT_GLYPH_PATH + "kb/e.png"
-	var auto_glyph_path: String = Globals.INPUT_GLYPH_PATH + "kb/t.png"
-	var history_close_glyph_path: String = Globals.INPUT_GLYPH_PATH + "kb/c.png"
+func on_change_glyphs() -> void:
+	var history_glyph_path := Globals.INPUT_GLYPH_PATH + "kb/e.png"
+	var auto_glyph_path := Globals.INPUT_GLYPH_PATH + "kb/t.png"
+	var history_close_glyph_path := Globals.INPUT_GLYPH_PATH + "kb/c.png"
 	match InputManager.current_input_type:
 		InputManager.InputType.XBOX:
 			history_glyph_path = Globals.INPUT_GLYPH_PATH + "xbox/y.png"
@@ -316,23 +342,23 @@ func on_change_glyphs():
 			history_close_glyph_path = Globals.INPUT_GLYPH_PATH + "switch/a.png"
 	DialogueHistoryButtonNode.set_button_icon(load(history_glyph_path))
 	DialogueAutoButtonNode.set_button_icon(load(auto_glyph_path))
-	HistoryCloseButtonNode.set_texture_normal(load(history_close_glyph_path))
+	HistoryCloseButtonNode.set_button_icon(load(history_close_glyph_path))
 
-func auto_on_state_changed(oldstate: Dialogue.DialogueState, newstate: Dialogue.DialogueState):
+func auto_on_state_changed(oldstate: Dialogue.DialogueState, newstate: Dialogue.DialogueState) -> void:
 	if (oldstate == Dialogue.DialogueState.SPEAKING and newstate == Dialogue.DialogueState.IDLE):
 		if (not Dialogue.current_dialogue["messages"][Dialogue.current_message_index].get("ending")):
-			CharacterTimer.set_wait_time(Globals.auto_wait_time)
-			CharacterTimer.start()
-			await CharacterTimer.timeout
-			add_responses()
+			AutoTimer.set_wait_time(Globals.auto_wait_time)
+			AutoTimer.start()
+			await AutoTimer.timeout
+			handle_continue(null)
 
-func clear_responses():
+func clear_responses() -> void:
 	for item in (DialogueResponseGridNode.get_children()):
 		if (item.name != "ResponseTemplate"):
 			item.queue_free()
 
 func process_custom_tags(content: String, track_pos: bool = true) -> String:
-	var offset = 0
+	var offset := 0
 	var matches = message_tag_regex.search_all(content)
 	if (track_pos):
 		for mat in matches:
@@ -343,7 +369,22 @@ func process_custom_tags(content: String, track_pos: bool = true) -> String:
 			offset += (mat.get_end() - mat.get_start())
 	return message_tag_regex.sub(content, "", true)
 
-func desaturate_nonspeaker():
+func time_to_text_complete(message) -> float:
+	# TODO: This can be optimized to not check each character
+	var speaker_speed = Globals.loaded_speakers.get(message.get("speaker")).get("default_message_speed")
+	var current_speed = speaker_speed if speaker_speed != null else Globals.DIALOGUE_DEFAULT_SPEED
+	var current_time := 0.0
+	for i in range((len(DialogueMessageContentNode.get_text()) + 1)):
+		current_time += (1.0 / current_speed)
+		if (current_message_tags.has(i)):
+			for tag in (current_message_tags.get(i)):
+				if (tag["tag"] == "pause"):
+					current_time += float(tag["value"])
+				elif (tag["tag"] == "speed"):
+					current_speed = float(tag["value"])
+	return current_time
+
+func desaturate_nonspeaker() -> void:
 	var message = Dialogue.current_dialogue["messages"][Dialogue.current_message_index]
 	var anim_up: TextureRect = null
 	if (message.get("participant2")):
@@ -382,7 +423,7 @@ func desaturate_nonspeaker():
 			last_speaker = 0
 	last_message = message
 
-func reset_dialogue():
+func reset_dialogue() -> void:
 	DialogueBoxNode.set_visible(false)
 	for node in HistoryMessageContainerNode.get_children():
 		node.set_visible(false)
