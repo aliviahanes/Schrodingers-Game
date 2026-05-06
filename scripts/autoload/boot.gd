@@ -3,6 +3,7 @@ extends Node
 # This is only meant to validate data on startup and prepare the necessary resources
 
 func _ready():
+	# TODO: Game boot animation, gives us a little time to get ready
 	# Load and validate all dialogue
 	for file_name in (DirAccess.open(Globals.DIALOGUE_DATA_PATH).get_files()):
 		var file = FileAccess.open(Globals.DIALOGUE_DATA_PATH + file_name, FileAccess.READ)
@@ -146,3 +147,24 @@ func _ready():
 						])
 			if (not messages_failed):
 				Globals.loaded_dialogue.set(id, contents)
+	# Load and validate all cutscenes
+	for path in (DirAccess.open(Globals.CUTSCENE_DATA_PATH).get_directories()):
+		var scene
+		if (ResourceLoader.exists(Globals.CUTSCENE_DATA_PATH + path + "cutscene.tscn")):
+			scene = load(Globals.CUTSCENE_DATA_PATH + path + "cutscene.tscn")
+		else:
+			Logging.log(Logging.LogType.WARNING, "Boot", "Cutscene %s does not have a scene file; it has not been loaded!" % path)
+			continue
+		var meta
+		if (FileAccess.file_exists(Globals.CUTSCENE_DATA_PATH + path + "meta.json")):
+			meta = JSON.parse_string(FileAccess.open(Globals.CUTSCENE_DATA_PATH + path + "meta.json", FileAccess.READ).get_as_text())
+		else:
+			Logging.log(Logging.LogType.WARNING, "Boot", "Cutscene %s does not have a meta file; it has not been loaded!" % path)
+			continue
+		if (scene and meta):
+			Globals.loaded_cutscenes.set(path, meta)
+		else:
+			Logging.log(Logging.LogType.WARNING, "Boot", "Couldn't load the scene and/or meta of cutscene %s; it has not been loaded!" % path)
+			continue
+	# Load main menu
+	get_tree().get_current_scene().add_child(preload("res://scenes/main_menu.tscn").instantiate())

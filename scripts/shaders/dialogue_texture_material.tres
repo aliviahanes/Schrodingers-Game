@@ -1,7 +1,6 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dw1i5xcsue780"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dw1i5xcsue780"]
 
 [ext_resource type="Shader" uid="uid://csfp1ve6jxoof" path="res://scripts/shaders/dialogue_texture_material.gdshader" id="1_iwino"]
 
 [resource]
 shader = ExtResource("1_iwino")
-shader_parameter/desaturate_strength = 0.0
