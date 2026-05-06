@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dahokl3buo40c"]
 
 [ext_resource type="Theme" uid="uid://dkfwtlc3ls7sb" path="res://ui/dialogue/dialogue_box.tres" id="1_3l5nu"]
-[ext_resource type="Script" uid="uid://30ylcf1trn4c" path="res://scripts/dialogue_ui.gd" id="1_bhyd5"]
+[ext_resource type="Script" path="res://scripts/dialogue_ui.gd" id="1_bhyd5"]
 [ext_resource type="Texture2D" uid="uid://c6f76cff7f5jp" path="res://sprites/test/IMG_1459.png" id="2_qpcyj"]
 [ext_resource type="Texture2D" uid="uid://c1ngt8plxnfx8" path="res://sprites/test/OW2_Winston.png" id="3_bhyd5"]
 [ext_resource type="Texture2D" uid="uid://1rbacoc1rjac" path="res://sprites/glyphs/kb/e.png" id="3_q4mab"]
