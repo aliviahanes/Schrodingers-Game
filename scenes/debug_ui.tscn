@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://ci71plw0vdj27"]
 
-[node name="DebugRoot" type="Node"]
+[node name="DebugRoot" type="Node" unique_id=919324258]
 
-[node name="UI" type="Control" parent="."]
+[node name="UI" type="Control" parent="." unique_id=475142826]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,12 +10,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="BackgroundPanel" type="Panel" parent="UI"]
+[node name="BackgroundPanel" type="Panel" parent="UI" unique_id=880074567]
 layout_mode = 1
 offset_right = 800.0
 offset_bottom = 600.0
 
-[node name="TabContainer" type="TabContainer" parent="UI/BackgroundPanel"]
+[node name="TabContainer" type="TabContainer" parent="UI/BackgroundPanel" unique_id=510468438]
 layout_mode = 1
 offset_right = 40.0
 offset_bottom = 40.0

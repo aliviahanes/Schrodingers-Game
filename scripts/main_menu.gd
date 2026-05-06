@@ -11,7 +11,7 @@ func _ready():
 	NewGameButtonNode.pressed.connect(on_newgame_press)
 	QuitButtonNode.pressed.connect(on_quit_press)
 
-func _input(event: InputEvent):
+func _unhandled_input(event: InputEvent):
 	if (event is InputEventKey or event is InputEventJoypadButton or event is InputEventJoypadMotion):
 		if (get_viewport().gui_get_focus_owner() == null):
 			ContinueButtonNode.grab_focus()
@@ -21,7 +21,9 @@ func on_continue_press():
 	Dialogue.begin_dialogue("example_dialogue")
 
 func on_newgame_press():
-	get_tree().change_scene_to_file("res://scenes/puzzle_scene.tscn")
+	self.queue_free() # This won't actually happen until after this function finishes executing
+	get_tree().get_current_scene().add_child(preload("res://scenes/levels/puzzle_scene.tscn").instantiate())
+	# TODO: Animate starting a new game (with loading screen?)
 
 func on_loadgame_press():
 	pass

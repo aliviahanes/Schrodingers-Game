@@ -47,7 +47,7 @@ func _ready() -> void:
 	continue_tween.tween_property(DialogueArrowPolygonNode, "position", Vector2(0.0, -7.0), 0.7)
 
 func _input(event: InputEvent) -> void:
-	if (Dialogue.current_dialogue_state != Dialogue.DialogueState.CLOSED):
+	if (Dialogue.current_dialogue_state != Dialogue.DialogueState.CLOSED and Game.get_current_game_state() != Game.GameState.PAUSE):
 		if (not event is InputEventMouse and not event.is_echo()):
 			if (not viewing_history):
 				if (event.is_action_pressed("dialogue_history", false, true)):
@@ -107,6 +107,8 @@ func animate_message() -> void:
 	var progress_tween := get_tree().create_tween()
 	progress_tween.tween_property(DialogueProgressBarNode, "value", 1.0, time_to_text_complete(Dialogue.current_dialogue.get("messages").get(Dialogue.current_message_index)))
 	for i in range((text_length + 1)):
+		if (Game.get_current_game_state() == Game.GameState.PAUSE):
+			await Game.game_state_changed
 		if (Dialogue.current_dialogue_state != Dialogue.DialogueState.SPEAKING):
 			progress_tween.kill()
 			DialogueProgressBarNode.set_value(1.0)
@@ -315,6 +317,8 @@ func on_auto_press() -> void:
 		DialogueAutoGlowNode.set_visible(false)
 		auto_enabled = false
 	else:
+		if (Dialogue.current_dialogue_state == Dialogue.DialogueState.IDLE):
+			auto_on_state_changed(Dialogue.DialogueState.SPEAKING, Dialogue.DialogueState.IDLE)
 		Dialogue.dialogue_state_changed.connect(auto_on_state_changed)
 		DialogueAutoGlowNode.set_visible(true)
 		auto_enabled = true

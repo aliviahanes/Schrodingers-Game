@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=4 format=3 uid="uid://cs2exp7ykjuum"]
+[gd_resource type="Theme" format=3 uid="uid://cs2exp7ykjuum"]
 
 [ext_resource type="StyleBox" uid="uid://dt1363vjatmyd" path="res://ui/main_menu/main_menu_button_hover_stylebox.tres" id="1_j2ubt"]
 [ext_resource type="StyleBox" uid="uid://cbbwhmsuun4it" path="res://ui/main_menu/main_menu_button_stylebox.tres" id="1_wgkol"]

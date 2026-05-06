@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://du5c6j3f6iw48"]
+
+[ext_resource type="Script" uid="uid://dxe3juax8hgha" path="res://data/cutscenes/example_cutscene/cutscene.gd" id="1_mjt31"]
+
+[node name="Cutscene" type="Node" unique_id=1062299683]
+script = ExtResource("1_mjt31")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1221071020]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dahokl3buo40c"]
+[gd_scene format=3 uid="uid://dahokl3buo40c"]
 
 [ext_resource type="Theme" uid="uid://dkfwtlc3ls7sb" path="res://ui/dialogue/dialogue_box.tres" id="1_3l5nu"]
 [ext_resource type="Script" uid="uid://30ylcf1trn4c" path="res://scripts/dialogue_ui.gd" id="1_bhyd5"]
@@ -31,10 +31,10 @@ fill_from = Vector2(0.5, 0.5)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_18hkw"]
 bg_color = Color(0.047415167, 0.49387014, 0.61446756, 1)
 
-[node name="DialogueRoot" type="Node"]
+[node name="DialogueRoot" type="Node" unique_id=1218340947]
 script = ExtResource("1_bhyd5")
 
-[node name="ClickShield" type="Control" parent="."]
+[node name="ClickShield" type="Control" parent="." unique_id=857400379]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -45,7 +45,7 @@ focus_mode = 2
 mouse_filter = 2
 mouse_force_pass_scroll_events = false
 
-[node name="DialogueBox" type="Control" parent="."]
+[node name="DialogueBox" type="Control" parent="." unique_id=695919618]
 layout_mode = 3
 anchors_preset = 7
 anchor_left = 0.5
@@ -58,7 +58,7 @@ offset_right = 960.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="Character1Texture" type="TextureRect" parent="DialogueBox"]
+[node name="Character1Texture" type="TextureRect" parent="DialogueBox" unique_id=857151425]
 material = ExtResource("5_o6y45")
 layout_mode = 1
 offset_left = 142.0
@@ -69,7 +69,7 @@ texture = ExtResource("6_18hkw")
 expand_mode = 1
 metadata/current_speaker = ""
 
-[node name="Character2Texture" type="TextureRect" parent="DialogueBox"]
+[node name="Character2Texture" type="TextureRect" parent="DialogueBox" unique_id=553734530]
 material = ExtResource("5_o6y45")
 layout_mode = 1
 anchors_preset = 1
@@ -82,16 +82,17 @@ offset_bottom = 150.0
 grow_horizontal = 0
 texture = ExtResource("3_bhyd5")
 expand_mode = 1
+flip_h = true
 metadata/current_speaker = ""
 
-[node name="BoxBackground" type="Panel" parent="DialogueBox"]
+[node name="BoxBackground" type="Panel" parent="DialogueBox" unique_id=1768133586]
 layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 370.0
 mouse_filter = 2
 theme = ExtResource("1_3l5nu")
 
-[node name="Message" type="Control" parent="DialogueBox/BoxBackground"]
+[node name="Message" type="Control" parent="DialogueBox/BoxBackground" unique_id=79878082]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -100,7 +101,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Character1Label" type="RichTextLabel" parent="DialogueBox/BoxBackground/Message"]
+[node name="Character1Label" type="RichTextLabel" parent="DialogueBox/BoxBackground/Message" unique_id=346300069]
 layout_mode = 1
 offset_left = 100.0
 offset_top = 5.0
@@ -120,7 +121,7 @@ shortcut_keys_enabled = false
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Character2Label" type="RichTextLabel" parent="DialogueBox/BoxBackground/Message"]
+[node name="Character2Label" type="RichTextLabel" parent="DialogueBox/BoxBackground/Message" unique_id=1750294061]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -144,7 +145,7 @@ shortcut_keys_enabled = false
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MessageContent" type="RichTextLabel" parent="DialogueBox/BoxBackground/Message"]
+[node name="MessageContent" type="RichTextLabel" parent="DialogueBox/BoxBackground/Message" unique_id=1636207646]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -167,18 +168,18 @@ shortcut_keys_enabled = false
 drag_and_drop_selection_enabled = false
 metadata/original_content = ""
 
-[node name="ResponseContainer" type="CenterContainer" parent="DialogueBox/BoxBackground/Message"]
+[node name="ResponseContainer" type="CenterContainer" parent="DialogueBox/BoxBackground/Message" unique_id=355718660]
 visible = false
 layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 370.0
 
-[node name="ResponseGrid" type="GridContainer" parent="DialogueBox/BoxBackground/Message/ResponseContainer"]
+[node name="ResponseGrid" type="GridContainer" parent="DialogueBox/BoxBackground/Message/ResponseContainer" unique_id=278451818]
 layout_mode = 2
 theme_override_constants/h_separation = 10
 columns = 2
 
-[node name="ResponseTemplate" type="Button" parent="DialogueBox/BoxBackground/Message/ResponseContainer/ResponseGrid"]
+[node name="ResponseTemplate" type="Button" parent="DialogueBox/BoxBackground/Message/ResponseContainer/ResponseGrid" unique_id=1122131724]
 visible = false
 custom_minimum_size = Vector2(900, 80)
 layout_mode = 2
@@ -186,7 +187,7 @@ text = "This is an example of a response! This is max size!!!!"
 autowrap_mode = 2
 expand_icon = true
 
-[node name="HistoryButton" type="Button" parent="DialogueBox/BoxBackground/Message"]
+[node name="HistoryButton" type="Button" parent="DialogueBox/BoxBackground/Message" unique_id=264566997]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -205,7 +206,7 @@ text = "History"
 icon = ExtResource("3_q4mab")
 expand_icon = true
 
-[node name="AutoButton" type="Button" parent="DialogueBox/BoxBackground/Message"]
+[node name="AutoButton" type="Button" parent="DialogueBox/BoxBackground/Message" unique_id=1512343816]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -224,7 +225,7 @@ text = "Auto"
 icon = ExtResource("4_o6y45")
 expand_icon = true
 
-[node name="EnableGlow" type="TextureRect" parent="DialogueBox/BoxBackground/Message/AutoButton"]
+[node name="EnableGlow" type="TextureRect" parent="DialogueBox/BoxBackground/Message/AutoButton" unique_id=155158278]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -238,7 +239,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_w4lkc")
 
-[node name="ProgressBar" type="ProgressBar" parent="DialogueBox/BoxBackground/Message"]
+[node name="ProgressBar" type="ProgressBar" parent="DialogueBox/BoxBackground/Message" unique_id=283154414]
 layout_mode = 1
 offset_right = 1920.0
 offset_bottom = 12.0
@@ -247,7 +248,7 @@ max_value = 1.0
 step = 0.001
 show_percentage = false
 
-[node name="ArrowContainer" type="Control" parent="DialogueBox/BoxBackground/Message"]
+[node name="ArrowContainer" type="Control" parent="DialogueBox/BoxBackground/Message" unique_id=1837284473]
 visible = false
 layout_mode = 1
 anchors_preset = 3
@@ -260,11 +261,11 @@ offset_top = -60.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="ArrowPolygon" type="Polygon2D" parent="DialogueBox/BoxBackground/Message/ArrowContainer"]
+[node name="ArrowPolygon" type="Polygon2D" parent="DialogueBox/BoxBackground/Message/ArrowContainer" unique_id=1996664494]
 antialiased = true
 polygon = PackedVector2Array(0, 0, 20, 10, 0, 20)
 
-[node name="HistoryBox" type="Control" parent="."]
+[node name="HistoryBox" type="Control" parent="." unique_id=396844427]
 visible = false
 layout_mode = 3
 anchors_preset = 7
@@ -278,14 +279,14 @@ offset_right = 960.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="BoxBackground" type="Panel" parent="HistoryBox"]
+[node name="BoxBackground" type="Panel" parent="HistoryBox" unique_id=337619589]
 layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 470.0
 mouse_filter = 2
 theme = ExtResource("1_3l5nu")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="HistoryBox/BoxBackground"]
+[node name="ScrollContainer" type="ScrollContainer" parent="HistoryBox/BoxBackground" unique_id=1338461306]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -301,15 +302,15 @@ grow_vertical = 2
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 3
 
-[node name="MessageContainer" type="VBoxContainer" parent="HistoryBox/BoxBackground/ScrollContainer"]
+[node name="MessageContainer" type="VBoxContainer" parent="HistoryBox/BoxBackground/ScrollContainer" unique_id=282078433]
 layout_mode = 2
 
-[node name="MessageTemplate" type="Panel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer"]
+[node name="MessageTemplate" type="Panel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer" unique_id=1625788948]
 visible = false
 custom_minimum_size = Vector2(1920, 128)
 layout_mode = 2
 
-[node name="Character1Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/MessageTemplate"]
+[node name="Character1Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/MessageTemplate" unique_id=158039151]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -322,7 +323,7 @@ grow_vertical = 2
 texture = ExtResource("2_qpcyj")
 expand_mode = 1
 
-[node name="Character2Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/MessageTemplate"]
+[node name="Character2Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/MessageTemplate" unique_id=1771486184]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -338,7 +339,7 @@ grow_vertical = 2
 texture = ExtResource("3_bhyd5")
 expand_mode = 1
 
-[node name="MessageContent" type="RichTextLabel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/MessageTemplate"]
+[node name="MessageContent" type="RichTextLabel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/MessageTemplate" unique_id=1285530308]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -354,12 +355,12 @@ grow_vertical = 2
 text = "This is where the message content would go! Unfortunately, there's no dialogue to put here yet, but that's OK, because this is just a placeholder! My goal here is to fill this up with as much text as we should have, so yay! I don't really know what else to put here, ladeedadeeda... AAAAAAAAA!!! Not sure if we'll ever use this much text, but yeah."
 vertical_alignment = 1
 
-[node name="Message_0" type="Panel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer"]
+[node name="Message_0" type="Panel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer" unique_id=1306358432]
 visible = false
 custom_minimum_size = Vector2(1920, 128)
 layout_mode = 2
 
-[node name="Character1Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_0"]
+[node name="Character1Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_0" unique_id=442565823]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -371,7 +372,7 @@ offset_bottom = 64.0
 grow_vertical = 2
 expand_mode = 1
 
-[node name="Character2Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_0"]
+[node name="Character2Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_0" unique_id=298421415]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -386,7 +387,7 @@ grow_horizontal = 0
 grow_vertical = 2
 expand_mode = 1
 
-[node name="MessageContent" type="RichTextLabel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_0"]
+[node name="MessageContent" type="RichTextLabel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_0" unique_id=334340109]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -401,12 +402,12 @@ grow_horizontal = 2
 grow_vertical = 2
 vertical_alignment = 1
 
-[node name="Message_1" type="Panel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer"]
+[node name="Message_1" type="Panel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer" unique_id=1147635289]
 visible = false
 custom_minimum_size = Vector2(1920, 128)
 layout_mode = 2
 
-[node name="Character1Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_1"]
+[node name="Character1Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_1" unique_id=1893028793]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -418,7 +419,7 @@ offset_bottom = 64.0
 grow_vertical = 2
 expand_mode = 1
 
-[node name="Character2Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_1"]
+[node name="Character2Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_1" unique_id=1962760494]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -433,7 +434,7 @@ grow_horizontal = 0
 grow_vertical = 2
 expand_mode = 1
 
-[node name="MessageContent" type="RichTextLabel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_1"]
+[node name="MessageContent" type="RichTextLabel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_1" unique_id=699484987]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -448,12 +449,12 @@ grow_horizontal = 2
 grow_vertical = 2
 vertical_alignment = 1
 
-[node name="Message_2" type="Panel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer"]
+[node name="Message_2" type="Panel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer" unique_id=1012864170]
 visible = false
 custom_minimum_size = Vector2(1920, 128)
 layout_mode = 2
 
-[node name="Character1Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_2"]
+[node name="Character1Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_2" unique_id=431293756]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -465,7 +466,7 @@ offset_bottom = 64.0
 grow_vertical = 2
 expand_mode = 1
 
-[node name="Character2Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_2"]
+[node name="Character2Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_2" unique_id=1302773954]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -480,7 +481,7 @@ grow_horizontal = 0
 grow_vertical = 2
 expand_mode = 1
 
-[node name="MessageContent" type="RichTextLabel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_2"]
+[node name="MessageContent" type="RichTextLabel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_2" unique_id=1455513726]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -495,12 +496,12 @@ grow_horizontal = 2
 grow_vertical = 2
 vertical_alignment = 1
 
-[node name="Message_3" type="Panel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer"]
+[node name="Message_3" type="Panel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer" unique_id=1498219947]
 visible = false
 custom_minimum_size = Vector2(1920, 128)
 layout_mode = 2
 
-[node name="Character1Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_3"]
+[node name="Character1Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_3" unique_id=1881948074]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -512,7 +513,7 @@ offset_bottom = 64.0
 grow_vertical = 2
 expand_mode = 1
 
-[node name="Character2Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_3"]
+[node name="Character2Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_3" unique_id=791924716]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -527,7 +528,7 @@ grow_horizontal = 0
 grow_vertical = 2
 expand_mode = 1
 
-[node name="MessageContent" type="RichTextLabel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_3"]
+[node name="MessageContent" type="RichTextLabel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_3" unique_id=1579958217]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -542,12 +543,12 @@ grow_horizontal = 2
 grow_vertical = 2
 vertical_alignment = 1
 
-[node name="Message_4" type="Panel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer"]
+[node name="Message_4" type="Panel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer" unique_id=1199351561]
 visible = false
 custom_minimum_size = Vector2(1920, 128)
 layout_mode = 2
 
-[node name="Character1Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_4"]
+[node name="Character1Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_4" unique_id=2032624805]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -559,7 +560,7 @@ offset_bottom = 64.0
 grow_vertical = 2
 expand_mode = 1
 
-[node name="Character2Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_4"]
+[node name="Character2Texture" type="TextureRect" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_4" unique_id=1605015201]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -574,7 +575,7 @@ grow_horizontal = 0
 grow_vertical = 2
 expand_mode = 1
 
-[node name="MessageContent" type="RichTextLabel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_4"]
+[node name="MessageContent" type="RichTextLabel" parent="HistoryBox/BoxBackground/ScrollContainer/MessageContainer/Message_4" unique_id=1691485115]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -589,7 +590,7 @@ grow_horizontal = 2
 grow_vertical = 2
 vertical_alignment = 1
 
-[node name="CloseButton" type="Button" parent="HistoryBox/BoxBackground"]
+[node name="CloseButton" type="Button" parent="HistoryBox/BoxBackground" unique_id=779059348]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -602,6 +603,6 @@ focus_mode = 0
 text = "Close"
 icon = ExtResource("9_18hkw")
 
-[node name="CharacterTimer" type="Timer" parent="."]
+[node name="CharacterTimer" type="Timer" parent="." unique_id=1426520300]
 
-[node name="AutoTimer" type="Timer" parent="."]
+[node name="AutoTimer" type="Timer" parent="." unique_id=697377986]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=0 format=3 uid="uid://bfxrhy4m244n0"]
+[gd_scene format=3 uid="uid://bfxrhy4m244n0"]
 
 [ext_resource type="Script" uid="uid://dhrkernkp27lf" path="res://scripts/object_interactable.gd" id="1_7stlk"]
 [ext_resource type="Texture2D" uid="uid://c1ngt8plxnfx8" path="res://sprites/test/OW2_Winston.png" id="1_rq3c5"]
